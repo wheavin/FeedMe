@@ -1,8 +1,11 @@
 import json
+import os
 import unittest
 from unittest.mock import patch
 
 from parser.rss_parser import RssUrlParser, RssParserError
+
+TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), 'data/rss_sample.json')
 
 
 class TestRssParsing(unittest.TestCase):
@@ -13,7 +16,7 @@ class TestRssParsing(unittest.TestCase):
         url = "https://www.fiercewireless.com/rss/xml"
         obj_under_test = RssUrlParser(url)
 
-        test_data = FileReader("./data/rss_sample.json")
+        test_data = FileReader(TESTDATA_FILENAME)
         mock_response.return_value = test_data.read()
 
         # When: the URL is parsed
