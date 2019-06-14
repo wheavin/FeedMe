@@ -3,6 +3,8 @@ import os
 import unittest
 from unittest.mock import patch
 
+from parameterized import parameterized
+
 from parser.rss_parser import RssUrlParser, RssParserError
 
 TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), 'data/rss_sample.json')
@@ -32,33 +34,31 @@ class TestRssParsing(unittest.TestCase):
         self.assertIn("Industry Voices—Pongratz", first_item.title)
         self.assertEqual("Stefan Pongratz", first_item.author)
 
-    def test_parse_for_empty_url(self):
+    @parameterized.expand([
+        ["Empty URL", ""],
+        ["Blank URL", "  "],
+        ["Null URL", None]
+    ])
+    def test_parse_for_invalid_url(self, _, value):
         # Given: an empty RSS feed URL to be parsed
-        obj_under_test = RssUrlParser("")
+        obj_under_test = RssUrlParser(value)
 
         # When: the URL is parsed
         with self.assertRaises(RssParserError) as error:
             obj_under_test.parse()
         self.assertIn("Error parsing for URL", str(error.exception))
 
+    @parameterized.expand([
+        ["Empty response dict", {}],
+        ["Empty response String", ""],
+        ["Null response", None]
+    ])
     @patch('feedparser.parse')
-    def test_parse_for_empty_response(self, mock_response):
+    def test_parse_for_invalid_response(self, _, value, mock_response):
         # Given: an RSS feed URL to be parsed
         url = "https://www.fiercewireless.com/rss/xml"
         obj_under_test = RssUrlParser(url)
-        mock_response.return_value = ""
-
-        # When: the URL is parsed
-        with self.assertRaises(RssParserError) as error:
-            obj_under_test.parse()
-        self.assertIn("Invalid response returned for URL", error.exception.message)
-
-    @patch('feedparser.parse')
-    def test_parse_for_null_response(self, mock_response):
-        # Given: an RSS feed URL to be parsed
-        url = "https://www.fiercewireless.com/rss/xml"
-        obj_under_test = RssUrlParser(url)
-        mock_response.return_value = None
+        mock_response.return_value = value
 
         # When: the URL is parsed
         with self.assertRaises(RssParserError) as error:
