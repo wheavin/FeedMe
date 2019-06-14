@@ -9,6 +9,7 @@ class RssChannel:
     def _parse_items(self, items):
         rss_items = []
         for item in items:
+            self._validate_item(item)
             title = item['title']
             link = item['link']
             summary = item['summary']
@@ -16,6 +17,11 @@ class RssChannel:
             author = item['author']
             rss_items.append(RssItem(title, link, summary, published, author))
         return rss_items
+
+    def _validate_item(self, item):
+        elements = ["title", "link", "summary", "published", "author"]
+        if not (all(element in item for element in elements)):
+            raise RssItemError("Invalid RSS channel entry data: %s" % item)
 
 
 class RssItem:
@@ -26,3 +32,9 @@ class RssItem:
         self.summary = summary
         self.published = published
         self.author = author
+
+
+class RssItemError(Exception):
+
+    def __init__(self, message):
+        self.message = message
