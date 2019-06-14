@@ -1,0 +1,71 @@
+{
+  "updated": "Thu, 13 Jun 2019 19:18:14 GMT",
+  "encoding": "utf-8",
+  "entries": [
+    {
+      "published": "Thu, 13 Jun 2019 16:24:27 +0000",
+      "id": "https://www.fiercewireless.com/rss/378181 at https:/www.fiercewireless.com",
+      "title": "Industry Voices—Pongratz: Will surging IoT connections help the suppliers and operators?",
+      "summary": "Wide-Area IoT connections – including cellular and non-cellular technologies – increased nearly 70% in 2018, growing at a much faster pace than expected.",
+      "link": "https://www.fiercewireless.com/iot/will-surging-iot-connections-help-suppliers-and-operators?utm_source=internal&utm_medium=rss",
+      "author": "Stefan Pongratz"
+    },
+    {
+      "published": "Thu, 13 Jun 2019 14:53:32 +0000",
+      "id": "https://www.fiercewireless.com/rss/378141 at https:/www.fiercewireless.com",
+      "title": "Germany ends 5G spectrum auction with €6.6B in bids",
+      "summary": "The auction, which lasted almost three months, raised €6.6 billion ($7.4 billion) for the German government, but some operators were not too pleased with the auction results.",
+      "link": "https://www.fiercewireless.com/regulatory/germany-ends-5g-spectrum-auction-eu6-6-billion-revenue?utm_source=internal&utm_medium=rss",
+      "author": "Kendra Chamberlain"
+    }
+  ],
+  "feed": {
+    "language": "en",
+    "link": "https://www.fiercewireless.com/rss/xml",
+    "title": "FierceWireless",
+    "description": ""
+  },
+  "namespaces": {
+    "sioct": "http://rdfs.org/sioc/types#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "og": "http://ogp.me/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "content": "http://purl.org/rss/1.0/modules/content/",
+    "sioc": "http://rdfs.org/sioc/ns#",
+    "schema": "http://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#"
+  },
+  "version": "rss20",
+  "headers": {
+    "X-Drupal-Cache": "MISS",
+    "Vary": "Cookie, Accept-Encoding",
+    "Cache-Control": "max-age=43200, public",
+    "Accept-Ranges": "bytes",
+    "Expires": "Sun, 19 Nov 1978 05:00:00 GMT",
+    "ETag": "'1560453494'",
+    "X-AH-Environment": "prod",
+    "Content-Type": "application/rss+xml; charset=utf-8",
+    "Expect-CT": "max-age=604800, report-uri='https: //report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct'",
+    "Last-Modified": "Thu, 13 Jun 2019 19:18:14 GMT",
+    "X-Content-Type-Options": "nosniff",
+    "Server": "cloudflare",
+    "X-Cache": "HIT",
+    "CF-RAY": "4e66a8a6995da663-DUB",
+    "X-Request-ID": "v-fd934906-8e0f-11e9-85b5-4b1ee912066f",
+    "X-Cache-Hits": "28",
+    "X-Drupal-Dynamic-Cache": "MISS",
+    "X-Frame-Options": "SAMEORIGIN",
+    "Content-Length": "15856",
+    "Date": "Thu, 13 Jun 2019 20:01:51 GMT",
+    "Set-Cookie": "__cfduid=dc351143e54574d2b80f1954aa396792d1560456111; expires=Fri, 12-Jun-20 20:01:51 GMT; path=/; domain=.fiercewireless.com; HttpOnly; Secure",
+    "Via": "varnish",
+    "Content-language": "en",
+    "X-UA-Compatible": "IE=edge",
+    "Connection": "close",
+    "X-Generator": "Drupal 8 (https://www.drupal.org)",
+    "CF-Cache-Status": "HIT"
+  },
+  "href": "https://www.fiercewireless.com/rss/xml"
+}
