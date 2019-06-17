@@ -1,4 +1,3 @@
-import json
 import os
 import unittest
 from unittest.mock import patch
@@ -7,8 +6,9 @@ from parameterized import parameterized
 
 from parser.rss_channel import RssItemError
 from parser.rss_parser import RssUrlParser, RssParserError
+from tests.test_utils.file_reader import JsonFileReader
 
-TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), 'data/rss_sample.json')
+TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), 'test_data/rss_sample.json')
 
 
 class TestRssParsing(unittest.TestCase):
@@ -19,8 +19,8 @@ class TestRssParsing(unittest.TestCase):
         url = "https://www.fiercewireless.com/rss/xml"
         obj_under_test = RssUrlParser(url)
 
-        test_data = FileReader(TESTDATA_FILENAME)
-        mock_response.return_value = test_data.read()
+        file_reader = JsonFileReader(TESTDATA_FILENAME)
+        mock_response.return_value = file_reader.read()
 
         # When: the URL is parsed
         rss_channel = obj_under_test.parse()
@@ -114,6 +114,19 @@ class TestRssParsing(unittest.TestCase):
         ["No author element", {
             "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
             "entries": [{"title": "Some Entry Title", "link": "some link"}]
+        }],
+        ["No summary element", {
+            "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
+            "entries": [{"title": "Some Entry Title", "link": "some link", "author": "Joe Bloggs"}]
+        }],
+        ["No published element", {
+            "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
+            "entries": [{"title": "Some Entry Title", "link": "some link", "author": "Joe Bloggs", "summary": "blah"}]
+        }],
+        ["Null title element", {
+            "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
+            "entries": [{"title": None, "link": "some link", "author": "Joe Bloggs", "summary": "blah",
+                         "published": "123"}]
         }]
     ])
     @patch("feedparser.parse")
@@ -127,13 +140,3 @@ class TestRssParsing(unittest.TestCase):
         with self.assertRaises(RssItemError) as error:
             obj_under_test.parse()
         self.assertIn("Invalid RSS channel entry data", error.exception.message)
-
-
-class FileReader:
-
-    def __init__(self, path):
-        self.path = path
-
-    def read(self):
-        with open(self.path) as json_file:
-            return json.load(json_file)

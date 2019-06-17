@@ -22,6 +22,8 @@ class RssChannel:
         elements = ["title", "link", "summary", "published", "author"]
         if not (all(element in item for element in elements)):
             raise RssItemError("Invalid RSS channel entry data: %s" % item)
+        if not (all(item[element] for element in elements)):
+            raise RssItemError("Invalid RSS channel entry data: %s" % item)
 
 
 class RssItem:
