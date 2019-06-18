@@ -1,5 +1,5 @@
 import os
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 
 from pyfakefs import fake_filesystem_unittest
 
@@ -26,7 +26,7 @@ class TestFeed(fake_filesystem_unittest.TestCase):
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"}, "entries": []
         }
         # When: the feed is refreshed
-        obj_under_test.refresh()
+        obj_under_test.refresh_content()
 
         # Then: the feed contents have been updated
         current_content = self.file_reader.read()

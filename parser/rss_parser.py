@@ -11,7 +11,8 @@ class RssUrlParser:
     def parse(self):
         rss_feed = feedparser.parse(self.url)
         self._validate_response(rss_feed)
-        return self._create_rss_channel(rss_feed)
+        rss_channel = self._create_rss_channel(rss_feed)
+        return rss_channel.format_feed_content()
 
     def _validate_response(self, rss_feed):
         if not rss_feed:

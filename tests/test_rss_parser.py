@@ -23,17 +23,15 @@ class TestRssParsing(unittest.TestCase):
         mock_response.return_value = file_reader.read()
 
         # When: the URL is parsed
-        rss_channel = obj_under_test.parse()
+        feed_content = obj_under_test.parse()
 
         # Then: the channel details are returned
-        self.assertEqual("FierceWireless", rss_channel.title)
-        self.assertEqual(url, rss_channel.url)
+        self.assertIn("FierceWireless", feed_content)
+        self.assertIn(url, feed_content)
 
         # And: the Item details are returned
-        self.assertEqual(2, len(rss_channel.rss_items))
-        first_item = rss_channel.rss_items[0]
-        self.assertIn("Industry Voices—Pongratz", first_item.title)
-        self.assertEqual("Stefan Pongratz", first_item.author)
+        self.assertIn("Industry Voices—Pongratz", feed_content)
+        self.assertIn("Stefan Pongratz", feed_content)
 
     @patch("feedparser.parse")
     def test_parse_rss_with_no_entries(self, mock_response):
@@ -44,13 +42,13 @@ class TestRssParsing(unittest.TestCase):
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"}, "entries": []
         }
         # When: the URL is parsed
-        rss_channel = obj_under_test.parse()
+        feed_content = obj_under_test.parse()
 
         # Then: the channel details are returned
-        self.assertEqual("FierceWireless", rss_channel.title)
+        self.assertIn("FierceWireless", feed_content)
 
         # And: the Item details are empty
-        self.assertEqual(0, len(rss_channel.rss_items))
+        self.assertIn("RSS feed is empty", feed_content)
 
     @parameterized.expand([
         ["Empty URL", ""],
