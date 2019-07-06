@@ -43,8 +43,8 @@ class RssChannel:
         Formats feed content is a clean and readable manner.
         :return: the formatted feed content.
         """
-        return "{title}\n{url}\n{summary}\n{rss_items}".format(
-            title=self.title, url=self.url, summary=self.description, rss_items=self.rss_items)
+        return "=================== {title} ===================\n{url}\n{summary}\n{rss_items}".format(
+            title=self.title, url=self.url, summary=self.description, rss_items="\n\n".join(self.rss_items))
 
 
 class RssItem:
