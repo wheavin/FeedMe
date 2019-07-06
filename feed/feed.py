@@ -1,12 +1,12 @@
 """
 Responsible for handling the RSS feed data.
 """
-import os
 
 from parser.rss_parser import RssUrlParser
+from utils.files import get_full_path
 
-RSS_FEED_URLS_FILENAME = os.path.join(os.path.dirname(__file__), 'data/rss_feeds.txt')
-RSS_FEED_CONTENT_FILENAME = os.path.join(os.path.dirname(__file__), 'data/rss_feed_content.txt')
+RSS_FEED_URLS_FILENAME = get_full_path("data", "rss_feeds.txt")
+RSS_FEED_CONTENT_FILENAME = get_full_path("data", "rss_feed_content.txt")
 
 
 def _write_feed_contents(feed_content):
@@ -22,7 +22,7 @@ def _get_rss_feed_urls():
             for url in rss_url_file:
                 rss_feed_urls.append(url)
     except FileNotFoundError:
-        raise RssFeedError("No RSS feed file found")
+        raise RssFeedError("No RSS feed file found for %s" % RSS_FEED_URLS_FILENAME)
     return rss_feed_urls
 
 
@@ -57,3 +57,8 @@ class RssFeedError(Exception):
     def __init__(self, message):
         super(RssFeedError, self).__init__(message)
         self.message = message
+
+
+if __name__ == '__main__':
+    feed = Feed()
+    feed.refresh_content()

@@ -1,4 +1,3 @@
-import os
 import unittest
 from unittest.mock import patch
 
@@ -7,8 +6,9 @@ from parameterized import parameterized
 from parser.rss_channel import RssItemError
 from parser.rss_parser import RssUrlParser, RssParserError
 from tests.test_utils.file_reader import JsonFileReader
+from utils.files import get_full_path
 
-TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), 'test_data/rss_sample.json')
+TESTDATA_FILENAME = get_full_path("tests", "test_data", "rss_sample.json")
 
 
 class TestRssParsing(unittest.TestCase):

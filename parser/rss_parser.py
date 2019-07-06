@@ -38,6 +38,7 @@ class RssUrlParser:
         Parses RSS feed data from given RSS feed URL.
         :return: the formatted RSS feed data.
         """
+        print("Parsing RSS feed for URL:", self.url)
         rss_feed = feedparser.parse(self.url)
         self._validate_response(rss_feed)
         rss_channel = _create_rss_channel(rss_feed)
@@ -48,6 +49,7 @@ class RssUrlParser:
             raise RssParserError("Invalid response returned for URL %s" % self.url)
         if 'bozo_exception' in rss_feed:
             raise RssParserError("Error parsing for URL %s" % self.url)
+        print("Successfully validated response.")
 
 
 class RssParserError(Exception):

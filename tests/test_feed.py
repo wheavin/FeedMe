@@ -5,10 +5,11 @@ from pyfakefs import fake_filesystem_unittest
 
 from feed.feed import Feed, RssFeedError
 from tests.test_utils.file_reader import TextFileReader
+from utils.files import get_full_path
 
-DATA_FILE_PATH = "/home/william/Development/git/FeedMe/feed/data/"
-RSS_FEED_CONTENT_FILENAME = DATA_FILE_PATH + "rss_feed_content.txt"
-RSS_FEED_URLS_FILENAME = DATA_FILE_PATH + "rss_feeds.txt"
+DATA_FILE_PATH = get_full_path("data")
+RSS_FEED_URLS_FILENAME = get_full_path("data", "rss_feeds.txt")
+RSS_FEED_CONTENT_FILENAME = get_full_path("data", "rss_feed_content.txt")
 
 
 def _prepare_rss_feeds_file(urls):
