@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 RSS feed channel.
 """
