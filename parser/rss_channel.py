@@ -6,9 +6,7 @@ RSS feed channel.
 
 def _validate_item(item):
     elements = ["title", "link", "summary", "published", "author"]
-    if not all(element in item for element in elements):
-        raise RssItemError("Invalid RSS channel entry data: %s" % item)
-    if not all(item[element] for element in elements):
+    if not all(element in item for element in elements) or not all(item[element] for element in elements):
         raise RssItemError("Invalid RSS channel entry data: %s" % item)
 
 
@@ -44,7 +42,7 @@ class RssChannel:
         Formats feed content is a clean and readable manner.
         :return: the formatted feed content.
         """
-        return "=================== {title} ===================\n{url}\n{summary}\n{rss_items}".format(
+        return "=================== {title} ===================<br><br>{url}<br>{summary}<br>{rss_items}".format(
             title=self.title, url=self.url, summary=self.description, rss_items="\n\n".join(self.rss_items))
 
 
@@ -65,7 +63,7 @@ class RssItem:
         Formats feed item content in a clean and readable manner.
         :return: the formatted item content.
         """
-        return "{title}\n{link}\n{summary}\n{published} :: {author}".format(
+        return "{title}<br>{link}<br>{summary}<br>{published} :: {author}<br><br>".format(
             title=self.title, link=self.link, summary=self.summary, published=self.published, author=self.author)
 
 

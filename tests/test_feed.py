@@ -6,7 +6,7 @@ from unittest.mock import patch
 from pyfakefs import fake_filesystem_unittest
 
 from feed.feed import Feed, RssFeedError
-from tests.test_utils.file_reader import TextFileReader
+from utils.file_reader import TextFileReader
 from utils.files import get_full_path
 
 DATA_FILE_PATH = get_full_path("data")

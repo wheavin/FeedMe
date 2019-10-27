@@ -7,7 +7,7 @@ from parameterized import parameterized
 
 from parser.rss_channel import RssItemError
 from parser.rss_parser import RssUrlParser, RssParserError
-from tests.test_utils.file_reader import JsonFileReader
+from utils.file_reader import JsonFileReader
 from utils.files import get_full_path
 
 TESTDATA_FILENAME = get_full_path("tests", "test_data", "rss_sample.json")
