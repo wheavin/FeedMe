@@ -42,8 +42,11 @@ class RssChannel:
         Formats feed content is a clean and readable manner.
         :return: the formatted feed content.
         """
-        return "=================== {title} ===================<br><br>{url}<br>{summary}<br>{rss_items}".format(
-            title=self.title, url=self.url, summary=self.description, rss_items="\n\n".join(self.rss_items))
+        return "<h2>{title}</h2><br><br>" \
+               "{url}<br>" \
+               "{summary}<br>" \
+               "{rss_items}" \
+            .format(title=self.title, url=self.url, summary=self.description, rss_items="\n\n".join(self.rss_items))
 
 
 class RssItem:
@@ -63,8 +66,12 @@ class RssItem:
         Formats feed item content in a clean and readable manner.
         :return: the formatted item content.
         """
-        return "{title}<br>{link}<br>{summary}<br>{published} :: {author}<br><br>".format(
-            title=self.title, link=self.link, summary=self.summary, published=self.published, author=self.author)
+        return "<h3>{title}</h3><br>" \
+               "{link}<br>" \
+               "{summary}<br>" \
+               "{published} :: {author}<br><br>" \
+            .format(title=self.title, link=self.link, summary=self.summary, published=self.published,
+                    author=self.author)
 
 
 class RssItemError(Exception):
