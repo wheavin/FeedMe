@@ -6,12 +6,10 @@ from unittest.mock import patch
 from pyfakefs import fake_filesystem_unittest
 
 from feed.feed import Feed, RssFeedError
-from utils.file_reader import TextFileReader
 from utils.files import get_full_path
 
 DATA_FILE_PATH = get_full_path("data")
 RSS_FEED_URLS_FILENAME = get_full_path("data", "rss_feeds.txt")
-RSS_FEED_CONTENT_FILENAME = get_full_path("data", "rss_feed_content.txt")
 
 
 def _prepare_rss_feeds_file(urls):
@@ -26,7 +24,6 @@ class TestFeed(fake_filesystem_unittest.TestCase):
 
     def setUp(self):
         self.setUpPyfakefs()
-        self.file_reader = TextFileReader(RSS_FEED_CONTENT_FILENAME)
 
     @patch("feedparser.parse")
     def test_refresh_with_empty_feed(self, mock_response):
@@ -37,14 +34,13 @@ class TestFeed(fake_filesystem_unittest.TestCase):
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"}, "entries": []
         }
         # When: the feed is refreshed
-        obj_under_test.refresh_content()
+        feed_content = obj_under_test.refresh_content()
 
-        # Then: the feed contents have been updated
-        current_content = self.file_reader.read()
-        self.assertIn("FierceWireless", current_content)
-        self.assertIn("some link", current_content)
-        self.assertIn("blah", current_content)
-        self.assertIn("RSS feed is empty", current_content)
+        # Then: the feed contents have been returned
+        self.assertIn("FierceWireless", feed_content)
+        self.assertIn("some link", feed_content)
+        self.assertIn("blah", feed_content)
+        self.assertIn("RSS feed is empty", feed_content)
 
     @patch("feedparser.parse")
     def test_refresh_with_single_feed_content(self, mock_response):
@@ -57,15 +53,14 @@ class TestFeed(fake_filesystem_unittest.TestCase):
                          "published": "123"}]
         }
         # When: the feed is refreshed
-        obj_under_test.refresh_content()
+        feed_content = obj_under_test.refresh_content()
 
         # Then: the feed contents have been updated
-        current_content = self.file_reader.read()
-        self.assertIn("FierceWireless", current_content)
-        self.assertIn("some link", current_content)
-        self.assertIn("blah", current_content)
-        self.assertIn("Some Entry Title", current_content)
-        self.assertIn("Joe Bloggs", current_content)
+        self.assertIn("FierceWireless", feed_content)
+        self.assertIn("some link", feed_content)
+        self.assertIn("blah", feed_content)
+        self.assertIn("Some Entry Title", feed_content)
+        self.assertIn("Joe Bloggs", feed_content)
 
     @patch("feedparser.parse")
     def test_refresh_with_multiple_feed_content(self, mock_response):
@@ -80,17 +75,16 @@ class TestFeed(fake_filesystem_unittest.TestCase):
                          "published": "123"}]
         }
         # When: the feed is refreshed
-        obj_under_test.refresh_content()
+        feed_content = obj_under_test.refresh_content()
 
         # Then: the feed contents have been updated
-        current_content = self.file_reader.read()
-        self.assertIn("FierceWireless", current_content)
-        self.assertIn("some link", current_content)
-        self.assertIn("blah", current_content)
-        self.assertIn("Some Entry Title", current_content)
-        self.assertIn("Joe Bloggs", current_content)
-        self.assertIn("Another Entry Title", current_content)
-        self.assertIn("Joe Smith", current_content)
+        self.assertIn("FierceWireless", feed_content)
+        self.assertIn("some link", feed_content)
+        self.assertIn("blah", feed_content)
+        self.assertIn("Some Entry Title", feed_content)
+        self.assertIn("Joe Bloggs", feed_content)
+        self.assertIn("Another Entry Title", feed_content)
+        self.assertIn("Joe Smith", feed_content)
 
     @patch("feedparser.parse")
     def test_refresh_with_multiple_urls(self, mock_response):
@@ -113,19 +107,18 @@ class TestFeed(fake_filesystem_unittest.TestCase):
                  "published": "123"}]
         }]
         # When: the feed is refreshed
-        obj_under_test.refresh_content()
+        feed_content = obj_under_test.refresh_content()
 
         # Then: the feed contents have been updated
-        current_content = self.file_reader.read()
-        self.assertIn("FierceWireless", current_content)
-        self.assertIn("some link", current_content)
-        self.assertIn("Some Entry Title", current_content)
-        self.assertIn("Joe Bloggs", current_content)
+        self.assertIn("FierceWireless", feed_content)
+        self.assertIn("some link", feed_content)
+        self.assertIn("Some Entry Title", feed_content)
+        self.assertIn("Joe Bloggs", feed_content)
 
-        self.assertIn("NotARealSite", current_content)
-        self.assertIn("some other link", current_content)
-        self.assertIn("Something interesting", current_content)
-        self.assertIn("Joey Baloni", current_content)
+        self.assertIn("NotARealSite", feed_content)
+        self.assertIn("some other link", feed_content)
+        self.assertIn("Something interesting", feed_content)
+        self.assertIn("Joey Baloni", feed_content)
 
     def test_refresh_with_empty_rss_feeds_file(self):
         # Given: an empty RSS feeds file

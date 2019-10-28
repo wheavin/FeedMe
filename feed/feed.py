@@ -7,13 +7,6 @@ from parser.rss_parser import RssUrlParser
 from utils.files import get_full_path
 
 RSS_FEED_URLS_FILENAME = get_full_path("data", "rss_feeds.txt")
-RSS_FEED_CONTENT_FILENAME = get_full_path("data", "rss_feed_content.txt")
-
-
-def _write_feed_contents(feed_content):
-    with open(RSS_FEED_CONTENT_FILENAME, "w") as feed_content_file:
-        feed_content_file.write(feed_content)
-    feed_content_file.close()
 
 
 def _get_rss_feed_urls():
@@ -47,7 +40,7 @@ class Feed:
         for rss_feed_url in self.rss_feed_urls:
             rss_url_parser = RssUrlParser(rss_feed_url)
             feed_content += rss_url_parser.parse()
-        _write_feed_contents(feed_content)
+        return feed_content
 
 
 class RssFeedError(Exception):
