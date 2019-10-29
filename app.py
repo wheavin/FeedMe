@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from flask import Flask
+from flask import Flask, render_template
 
 from feed.feed import Feed
 
@@ -11,7 +11,8 @@ rss_feed = Feed()
 @app.route("/")
 def refresh_feed():
     print("Refreshing RSS feed content")
-    return rss_feed.refresh_content()
+    feed_content = rss_feed.refresh_content()
+    return render_template("index.html", page_title="FeedMe", feed_content=feed_content)
 
 
 if __name__ == '__main__':
