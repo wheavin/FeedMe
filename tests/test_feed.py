@@ -1,35 +1,18 @@
 #!/usr/bin/python3
 
-import os
+import unittest
 from unittest.mock import patch
 
-from pyfakefs import fake_filesystem_unittest
-
 from feed.feed import Feed, RssFeedError
-from utils.files import get_full_path
-
-DATA_FILE_PATH = get_full_path("data")
-RSS_FEED_URLS_FILENAME = get_full_path("data", "rss_feeds.txt")
+from feed.rss_feed_urls import RssFeedUrls
 
 
-def _prepare_rss_feeds_file(urls):
-    os.makedirs(DATA_FILE_PATH)
-    with open(RSS_FEED_URLS_FILENAME, "w+") as rss_feed_file:
-        for url in urls:
-            rss_feed_file.write(url + "\n")
-        rss_feed_file.close()
-
-
-class TestFeed(fake_filesystem_unittest.TestCase):
-
-    def setUp(self):
-        self.setUpPyfakefs()
-
+class TestFeed(unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_empty_feed(self, mock_response):
         # Given: a feed instance
-        _prepare_rss_feeds_file("https://www.fiercewireless.com/rss/xml")
-        obj_under_test = Feed()
+        rss_feed_urls = RssFeedUrls(["https://www.fiercewireless.com/rss/xml"])
+        obj_under_test = Feed(rss_feed_urls)
         mock_response.return_value = {
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"}, "entries": []
         }
@@ -45,8 +28,8 @@ class TestFeed(fake_filesystem_unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_single_feed_content(self, mock_response):
         # Given: a feed instance
-        _prepare_rss_feeds_file("https://www.fiercewireless.com/rss/xml")
-        obj_under_test = Feed()
+        rss_feed_urls = RssFeedUrls(["https://www.fiercewireless.com/rss/xml"])
+        obj_under_test = Feed(rss_feed_urls)
         mock_response.return_value = {
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"},
             "entries": [{"title": "Some Entry Title", "link": "some link", "author": "Joe Bloggs", "summary": "blah",
@@ -65,8 +48,8 @@ class TestFeed(fake_filesystem_unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_multiple_feed_content(self, mock_response):
         # Given: a feed instance
-        _prepare_rss_feeds_file("https://www.fiercewireless.com/rss/xml")
-        obj_under_test = Feed()
+        rss_feed_urls = RssFeedUrls(["https://www.fiercewireless.com/rss/xml"])
+        obj_under_test = Feed(rss_feed_urls)
         mock_response.return_value = {
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"},
             "entries": [{"title": "Some Entry Title", "link": "some link", "author": "Joe Bloggs", "summary": "blah",
@@ -89,8 +72,9 @@ class TestFeed(fake_filesystem_unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_multiple_urls(self, mock_response):
         # Given: two feed instances
-        _prepare_rss_feeds_file(["https://www.fiercewireless.com/rss/xml", "https://www.notarealsite.com/rss/xml"])
-        obj_under_test = Feed()
+        rss_feed_urls = RssFeedUrls(
+            ["https://www.fiercewireless.com/rss/xml", "https://www.someotherfeed.com/rss/xml"])
+        obj_under_test = Feed(rss_feed_urls)
         mock_response.side_effect = [{
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"},
             "entries": [
@@ -120,10 +104,9 @@ class TestFeed(fake_filesystem_unittest.TestCase):
         self.assertIn("Something interesting", feed_content)
         self.assertIn("Joey Baloni", feed_content)
 
-    def test_refresh_with_empty_rss_feeds_file(self):
+    def test_refresh_with_null_rss_feeds(self):
         # Given: an empty RSS feeds file
-        _prepare_rss_feeds_file([])
-        obj_under_test = Feed()
+        obj_under_test = Feed(None)
 
         # When: the feed is refreshed
         with self.assertRaises(RssFeedError) as error:
@@ -131,11 +114,3 @@ class TestFeed(fake_filesystem_unittest.TestCase):
 
         # Then: an error message is given
         self.assertIn("No RSS feed URLs found", error.exception.message)
-
-    def test_refresh_with_no_rss_feeds_file(self):
-        # When: the feed is created with no RSS feeds file
-        with self.assertRaises(RssFeedError) as error:
-            Feed()
-
-        # Then: an error message is given
-        self.assertIn("No RSS feed file found", error.exception.message)

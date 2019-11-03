@@ -3,9 +3,11 @@
 from flask import Flask, render_template
 
 from feed.feed import Feed
+from feed.rss_feed_urls import RssFeedUrls
 
 app = Flask(__name__)
-rss_feed = Feed()
+rss_feed_urls = RssFeedUrls(None)
+rss_feed = Feed(rss_feed_urls)
 
 
 @app.route("/")

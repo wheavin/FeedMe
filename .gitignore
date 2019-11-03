@@ -3,8 +3,10 @@
 
 # Python
 venv/
+env/
 __pycache__/
 *.pyc
+.cache/
 
 # Project
 data/

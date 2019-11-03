@@ -4,20 +4,6 @@ Responsible for handling the RSS feed data.
 """
 
 from parser.rss_parser import RssUrlParser
-from utils.files import get_full_path
-
-RSS_FEED_URLS_FILENAME = get_full_path("data", "rss_feeds.txt")
-
-
-def _get_rss_feed_urls():
-    rss_feed_urls = []
-    try:
-        with open(RSS_FEED_URLS_FILENAME) as rss_url_file:
-            for url in rss_url_file:
-                rss_feed_urls.append(url)
-    except FileNotFoundError:
-        raise RssFeedError("No RSS feed file found for %s" % RSS_FEED_URLS_FILENAME)
-    return rss_feed_urls
 
 
 class Feed:
@@ -25,8 +11,8 @@ class Feed:
     RSS feed data.
     """
 
-    def __init__(self):
-        self.rss_feed_urls = _get_rss_feed_urls()
+    def __init__(self, rss_feed_urls):
+        self.rss_feed_urls = rss_feed_urls
 
     def refresh_content(self):
         """
@@ -37,7 +23,7 @@ class Feed:
             raise RssFeedError("No RSS feed URLs found")
 
         feed_content = ""
-        for rss_feed_url in self.rss_feed_urls:
+        for rss_feed_url in self.rss_feed_urls.get_urls():
             rss_url_parser = RssUrlParser(rss_feed_url)
             feed_content += rss_url_parser.parse()
         return feed_content
