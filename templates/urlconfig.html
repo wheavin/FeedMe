@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RSS Feed URL Config</title>
+</head>
+<body>
+    <h1>Add RSS Feed URL</h1>
+    <p>
+        <a href="/">Back</a>
+    </p>
+
+    <!-- Add RSS feed URLs -->
+    <form method="POST" action="./config">
+        <input type="text" name="url">
+        <input type="submit" value="Add">
+    </form>
+
+    <!-- Display any flashed messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul>
+        {% for message in messages%}
+        <li>{{ message[1] }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Display any added RSS feed entries -->
+    <h1>RSS Feed URLs</h1>
+    {% for rss_feed_url in rss_feed_urls %}
+    <form method="POST" action="./update">
+        <input type="hidden" value="{{rss_feed_url.url}}" name="old_url">
+        <input type="text" value="{{rss_feed_url.url}}" name="new_url">
+        <input type="submit" value="Update">
+    </form>
+    <form method="POST" action="./delete">
+        <input type="hidden" value="{{rss_feed_url.url}}" name="url">
+        <input type="submit" value="Delete">
+    </form>
+    {% endfor %}
+</body>
+</html>

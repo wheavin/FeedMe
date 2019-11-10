@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{{ page_title }}</title>
-    </head>
-    <body>
-        {{ feed_content|safe }}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+</head>
+<body>
+    <p>
+        <a href="/config">Configure RSS Feed URLs</a>
+    </p>
+    {{ feed_content|safe }}
+</body>
 </html>

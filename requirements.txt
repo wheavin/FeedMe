@@ -1,3 +1,5 @@
 parameterized
 feedparser
 Flask
+flask-sqlalchemy
+flask-migrate

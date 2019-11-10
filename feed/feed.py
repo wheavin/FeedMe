@@ -3,7 +3,7 @@
 Responsible for handling the RSS feed data.
 """
 
-from parser.rss_parser import RssUrlParser
+from parser.rss_parser import RssUrlParser, RssParserError
 
 
 class Feed:
@@ -19,14 +19,16 @@ class Feed:
         Gets the feed content for each RSS feed url and writes this content to the data file.
         :return:
         """
-        if not self.rss_feed_urls:
-            raise RssFeedError("No RSS feed URLs found")
-
         feed_content = ""
-        for rss_feed_url in self.rss_feed_urls.get_urls():
-            rss_url_parser = RssUrlParser(rss_feed_url)
-            feed_content += rss_url_parser.parse()
-        return feed_content
+        if self.rss_feed_urls:
+            for rss_feed_url in self.rss_feed_urls:
+                rss_url_parser = RssUrlParser(rss_feed_url)
+                try:
+                    feed_content += rss_url_parser.parse()
+                except RssParserError as error:
+                    print(error.message)
+
+        return feed_content if feed_content else "No RSS feed content to display"
 
 
 class RssFeedError(Exception):

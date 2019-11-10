@@ -3,15 +3,16 @@
 import unittest
 from unittest.mock import patch
 
-from feed.feed import Feed, RssFeedError
-from feed.rss_feed_urls import RssFeedUrls
+from parameterized import parameterized
+
+from feed.feed import Feed
 
 
 class TestFeed(unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_empty_feed(self, mock_response):
         # Given: a feed instance
-        rss_feed_urls = RssFeedUrls(["https://www.fiercewireless.com/rss/xml"])
+        rss_feed_urls = ["https://www.fiercewireless.com/rss/xml"]
         obj_under_test = Feed(rss_feed_urls)
         mock_response.return_value = {
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"}, "entries": []
@@ -28,7 +29,7 @@ class TestFeed(unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_single_feed_content(self, mock_response):
         # Given: a feed instance
-        rss_feed_urls = RssFeedUrls(["https://www.fiercewireless.com/rss/xml"])
+        rss_feed_urls = ["https://www.fiercewireless.com/rss/xml"]
         obj_under_test = Feed(rss_feed_urls)
         mock_response.return_value = {
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"},
@@ -48,7 +49,7 @@ class TestFeed(unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_multiple_feed_content(self, mock_response):
         # Given: a feed instance
-        rss_feed_urls = RssFeedUrls(["https://www.fiercewireless.com/rss/xml"])
+        rss_feed_urls = ["https://www.fiercewireless.com/rss/xml"]
         obj_under_test = Feed(rss_feed_urls)
         mock_response.return_value = {
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"},
@@ -72,8 +73,7 @@ class TestFeed(unittest.TestCase):
     @patch("feedparser.parse")
     def test_refresh_with_multiple_urls(self, mock_response):
         # Given: two feed instances
-        rss_feed_urls = RssFeedUrls(
-            ["https://www.fiercewireless.com/rss/xml", "https://www.someotherfeed.com/rss/xml"])
+        rss_feed_urls = ["https://www.fiercewireless.com/rss/xml", "https://www.someotherfeed.com/rss/xml"]
         obj_under_test = Feed(rss_feed_urls)
         mock_response.side_effect = [{
             "feed": {"title": "FierceWireless", "link": "some link", "description": "blah"},
@@ -104,13 +104,16 @@ class TestFeed(unittest.TestCase):
         self.assertIn("Something interesting", feed_content)
         self.assertIn("Joey Baloni", feed_content)
 
-    def test_refresh_with_null_rss_feeds(self):
-        # Given: an empty RSS feeds file
-        obj_under_test = Feed(None)
+    @parameterized.expand([
+        ["Null URL list", None],
+        ["Empty URL list", []]
+    ])
+    def test_refresh_with_empty_rss_feeds(self, _, value):
+        # Given: an empty RSS feed URL list
+        obj_under_test = Feed(value)
 
         # When: the feed is refreshed
-        with self.assertRaises(RssFeedError) as error:
-            obj_under_test.refresh_content()
+        feed_content = obj_under_test.refresh_content()
 
-        # Then: an error message is given
-        self.assertIn("No RSS feed URLs found", error.exception.message)
+        # Then: no RSS feed content is returned
+        self.assertIn("No RSS feed content to display", feed_content)
