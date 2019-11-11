@@ -13,3 +13,7 @@ data/
 
 # Database
 *.db
+
+# Coverage.py
+.coverage
+htmlcov/

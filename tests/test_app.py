@@ -73,3 +73,40 @@ class TestFeedMeApp(unittest.TestCase):
         # Then: no entry will be added
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"Please provide a valid URL", response.data)
+
+    @patch("app.db")
+    @patch("app.RssFeedUrl")
+    def test_update_rss_feed_url_entry(self, mock_rss_feed_url, mock_db):
+        # Given: an RSS feel URL entry
+        rss_feed_url = RssFeedUrl()
+        rss_feed_url.url = "https://www.fiercewireless.com/rss/xml"
+        mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
+
+        # When: the RSS feed URL entry is updated
+        response = app.test_client().post(
+            "/update",
+            data=dict(
+                new_url="https://www.someothersite.com/rss/xml", old_url="https://www.fiercewireless.com/rss/xml"),
+            follow_redirects=True
+        )
+        # Then: the database has been updated with the changed entry
+        assert mock_db.session.commit.called
+        self.assertEqual(HTTP_SUCCESS, response.status_code)
+
+    @patch("app.db")
+    @patch("app.RssFeedUrl")
+    def test_delete_rss_feed_url_entry(self, mock_rss_feed_url, mock_db):
+        # Given: an RSS feel URL entry
+        rss_feed_url = RssFeedUrl()
+        rss_feed_url.url = "https://www.fiercewireless.com/rss/xml"
+        mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
+
+        # When: the RSS feed URL entry is deleted
+        response = app.test_client().post(
+            "/delete",
+            data=dict(url="https://www.fiercewireless.com/rss/xml"),
+            follow_redirects=True
+        )
+        # Then: the database has been updated with the removed entry
+        assert mock_db.session.commit.called
+        self.assertEqual(HTTP_SUCCESS, response.status_code)

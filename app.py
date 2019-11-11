@@ -9,6 +9,7 @@ from utils.files import get_full_path
 database_file = "sqlite:///{}".format(get_full_path("urldatabase.db"))
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
 
