@@ -19,16 +19,16 @@ class Feed:
         Gets the feed content for each RSS feed url and writes this content to the data file.
         :return:
         """
-        feed_content = ""
+        feed_content = []
         if self.rss_feed_urls:
             for rss_feed_url in self.rss_feed_urls:
                 rss_url_parser = RssUrlParser(rss_feed_url)
                 try:
-                    feed_content += rss_url_parser.parse()
+                    feed_content.append(rss_url_parser.parse())
                 except RssParserError as error:
                     print(error.message)
 
-        return feed_content if feed_content else "No RSS feed content to display"
+        return feed_content if feed_content else ["No RSS feed content to display"]
 
 
 class RssFeedError(Exception):
@@ -39,8 +39,3 @@ class RssFeedError(Exception):
     def __init__(self, message):
         super(RssFeedError, self).__init__(message)
         self.message = message
-
-
-if __name__ == '__main__':
-    feed = Feed()
-    feed.refresh_content()

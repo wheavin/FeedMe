@@ -21,10 +21,11 @@ class TestFeed(unittest.TestCase):
         feed_content = obj_under_test.refresh_content()
 
         # Then: the feed contents have been returned
-        self.assertIn("FierceWireless", feed_content)
-        self.assertIn("some link", feed_content)
-        self.assertIn("blah", feed_content)
-        self.assertIn("RSS feed is empty", feed_content)
+        self.assertIn("<h2>FierceWireless</h2>"
+                      "<br><br>some link"
+                      "<br>blah"
+                      "<br>RSS feed is empty",
+                      feed_content)
 
     @patch("feedparser.parse")
     def test_refresh_with_single_feed_content(self, mock_response):
@@ -40,11 +41,14 @@ class TestFeed(unittest.TestCase):
         feed_content = obj_under_test.refresh_content()
 
         # Then: the feed contents have been updated
-        self.assertIn("FierceWireless", feed_content)
-        self.assertIn("some link", feed_content)
-        self.assertIn("blah", feed_content)
-        self.assertIn("Some Entry Title", feed_content)
-        self.assertIn("Joe Bloggs", feed_content)
+        self.assertIn("<h2>FierceWireless</h2>"
+                      "<br><br>some link"
+                      "<br>blah<br>"
+                      "<h3>Some Entry Title</h3>"
+                      "<br>some link"
+                      "<br>blah"
+                      "<br>123 :: Joe Bloggs<br><br>",
+                      feed_content)
 
     @patch("feedparser.parse")
     def test_refresh_with_multiple_feed_content(self, mock_response):
@@ -62,13 +66,19 @@ class TestFeed(unittest.TestCase):
         feed_content = obj_under_test.refresh_content()
 
         # Then: the feed contents have been updated
-        self.assertIn("FierceWireless", feed_content)
-        self.assertIn("some link", feed_content)
-        self.assertIn("blah", feed_content)
-        self.assertIn("Some Entry Title", feed_content)
-        self.assertIn("Joe Bloggs", feed_content)
-        self.assertIn("Another Entry Title", feed_content)
-        self.assertIn("Joe Smith", feed_content)
+        self.assertIn("<h2>FierceWireless</h2>"
+                      "<br><br>some link"
+                      "<br>blah<br>"
+                      "<h3>Some Entry Title</h3>"
+                      "<br>some link"
+                      "<br>blah"
+                      "<br>123 :: Joe Bloggs<br><br>"
+                      "\n\n"
+                      "<h3>Another Entry Title</h3>"
+                      "<br>some link"
+                      "<br>blah"
+                      "<br>123 :: Joe Smith<br><br>",
+                      feed_content)
 
     @patch("feedparser.parse")
     def test_refresh_with_multiple_urls(self, mock_response):
@@ -94,15 +104,33 @@ class TestFeed(unittest.TestCase):
         feed_content = obj_under_test.refresh_content()
 
         # Then: the feed contents have been updated
-        self.assertIn("FierceWireless", feed_content)
-        self.assertIn("some link", feed_content)
-        self.assertIn("Some Entry Title", feed_content)
-        self.assertIn("Joe Bloggs", feed_content)
+        self.assertIn("<h2>FierceWireless</h2>"
+                      "<br><br>some link"
+                      "<br>blah<br>"
+                      "<h3>Some Entry Title</h3>"
+                      "<br>some link"
+                      "<br>blah"
+                      "<br>123 :: Joe Bloggs<br><br>"
+                      "\n\n"
+                      "<h3>Another Entry Title</h3>"
+                      "<br>some link"
+                      "<br>blah"
+                      "<br>123 :: Joe Smith<br><br>",
+                      feed_content)
 
-        self.assertIn("NotARealSite", feed_content)
-        self.assertIn("some other link", feed_content)
-        self.assertIn("Something interesting", feed_content)
-        self.assertIn("Joey Baloni", feed_content)
+        self.assertIn("<h2>NotARealSite</h2>"
+                      "<br><br>some other link"
+                      "<br>lalala<br>"
+                      "<h3>Something interesting</h3>"
+                      "<br>some link"
+                      "<br>blah"
+                      "<br>123 :: Joey Baloni<br><br>"
+                      "\n\n"
+                      "<h3>Something else</h3>"
+                      "<br>some link"
+                      "<br>blah"
+                      "<br>123 :: Joey Baloni<br><br>",
+                      feed_content)
 
     @parameterized.expand([
         ["Null URL list", None],
