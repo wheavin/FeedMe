@@ -8,6 +8,8 @@
     <p>
         <a href="/config">Configure RSS Feed URLs</a>
     </p>
-    {{ feed_content|safe }}
+    {% for feed_item in feed_content %}
+    <p>{{ feed_item|safe }}</p>
+    {% endfor %}
 </body>
 </html>
