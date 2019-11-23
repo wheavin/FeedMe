@@ -43,7 +43,7 @@ class RssChannel:
         :return: the formatted feed content.
         """
         return "<h2>{title}</h2><br><br>" \
-               "{url}<br>" \
+               "<a href=\"{url}\" target=\"_blank\">{url}</a><br>" \
                "{summary}<br>" \
                "{rss_items}" \
             .format(title=self.title, url=self.url, summary=self.description, rss_items="\n\n".join(self.rss_items))
@@ -67,7 +67,7 @@ class RssItem:
         :return: the formatted item content.
         """
         return "<h3>{title}</h3><br>" \
-               "{link}<br>" \
+               "<a href=\"{link}\" target=\"_blank\">{link}</a><br>" \
                "{summary}<br>" \
                "{published} :: {author}<br><br>" \
             .format(title=self.title, link=self.link, summary=self.summary, published=self.published,

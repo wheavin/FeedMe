@@ -22,7 +22,7 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been returned
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br>some link"
+                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>RSS feed is empty",
                       feed_content)
@@ -42,10 +42,10 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been updated
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br>some link"
+                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah<br>"
                       "<h3>Some Entry Title</h3>"
-                      "<br>some link"
+                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>123 :: Joe Bloggs<br><br>",
                       feed_content)
@@ -67,15 +67,15 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been updated
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br>some link"
+                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah<br>"
                       "<h3>Some Entry Title</h3>"
-                      "<br>some link"
+                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>123 :: Joe Bloggs<br><br>"
                       "\n\n"
                       "<h3>Another Entry Title</h3>"
-                      "<br>some link"
+                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>123 :: Joe Smith<br><br>",
                       feed_content)
@@ -105,29 +105,29 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been updated
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br>some link"
+                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah<br>"
                       "<h3>Some Entry Title</h3>"
-                      "<br>some link"
+                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>123 :: Joe Bloggs<br><br>"
                       "\n\n"
                       "<h3>Another Entry Title</h3>"
-                      "<br>some link"
+                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>123 :: Joe Smith<br><br>",
                       feed_content)
 
         self.assertIn("<h2>NotARealSite</h2>"
-                      "<br><br>some other link"
+                      "<br><br><a href=\"some other link\" target=\"_blank\">some other link</a>"
                       "<br>lalala<br>"
                       "<h3>Something interesting</h3>"
-                      "<br>some link"
+                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>123 :: Joey Baloni<br><br>"
                       "\n\n"
                       "<h3>Something else</h3>"
-                      "<br>some link"
+                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
                       "<br>blah"
                       "<br>123 :: Joey Baloni<br><br>",
                       feed_content)
