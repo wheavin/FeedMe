@@ -29,7 +29,6 @@ class TestRssParsing(unittest.TestCase):
 
         # Then: the channel details are returned
         self.assertIn("FierceWireless", feed_content)
-        self.assertIn(url, feed_content)
 
         # And: the Item details are returned
         self.assertIn("Industry Voices—Pongratz", feed_content)

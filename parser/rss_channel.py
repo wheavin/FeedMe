@@ -19,7 +19,7 @@ def _parse_items(items):
         title = item['title']
         link = item['link']
         summary = item['summary']
-        published = item['published']
+        published = item['published'].replace("+0000", "").rstrip()
         author = item['author']
         rss_item = RssItem(title, link, summary, published, author)
         rss_items.append(rss_item.format_item_content())
@@ -42,9 +42,8 @@ class RssChannel:
         Formats feed content is a clean and readable manner.
         :return: the formatted feed content.
         """
-        return "<h2>{title}</h2><br><br>" \
-               "<a href=\"{url}\" target=\"_blank\">{url}</a><br>" \
-               "{summary}<br>" \
+        return "<h2>{title}</h2>" \
+               "<p>{summary}</p>" \
                "{rss_items}" \
             .format(title=self.title, url=self.url, summary=self.description, rss_items="\n\n".join(self.rss_items))
 
@@ -66,10 +65,10 @@ class RssItem:
         Formats feed item content in a clean and readable manner.
         :return: the formatted item content.
         """
-        return "<h3>{title}</h3><br>" \
-               "<a href=\"{link}\" target=\"_blank\">{link}</a><br>" \
-               "{summary}<br>" \
-               "{published} :: {author}<br><br>" \
+        return "<h3>{title}</h3>" \
+               "<p><a href=\"{link}\" target=\"_blank\">{link}</a></p>" \
+               "<p>{summary}</p>" \
+               "<p>{published} - {author}</p>" \
             .format(title=self.title, link=self.link, summary=self.summary, published=self.published,
                     author=self.author)
 

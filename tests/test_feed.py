@@ -22,9 +22,8 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been returned
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>RSS feed is empty",
+                      "<p>blah</p>"
+                      "RSS feed is empty",
                       feed_content)
 
     @patch("feedparser.parse")
@@ -42,12 +41,11 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been updated
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah<br>"
+                      "<p>blah</p>"
                       "<h3>Some Entry Title</h3>"
-                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>123 :: Joe Bloggs<br><br>",
+                      "<p><a href=\"some link\" target=\"_blank\">some link</a></p>"
+                      "<p>blah</p>"
+                      "<p>123 - Joe Bloggs</p>",
                       feed_content)
 
     @patch("feedparser.parse")
@@ -67,17 +65,16 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been updated
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah<br>"
+                      "<p>blah</p>"
                       "<h3>Some Entry Title</h3>"
-                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>123 :: Joe Bloggs<br><br>"
+                      "<p><a href=\"some link\" target=\"_blank\">some link</a></p>"
+                      "<p>blah</p>"
+                      "<p>123 - Joe Bloggs</p>"
                       "\n\n"
                       "<h3>Another Entry Title</h3>"
-                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>123 :: Joe Smith<br><br>",
+                      "<p><a href=\"some link\" target=\"_blank\">some link</a></p>"
+                      "<p>blah</p>"
+                      "<p>123 - Joe Smith</p>",
                       feed_content)
 
     @patch("feedparser.parse")
@@ -105,31 +102,29 @@ class TestFeed(unittest.TestCase):
 
         # Then: the feed contents have been updated
         self.assertIn("<h2>FierceWireless</h2>"
-                      "<br><br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah<br>"
+                      "<p>blah</p>"
                       "<h3>Some Entry Title</h3>"
-                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>123 :: Joe Bloggs<br><br>"
+                      "<p><a href=\"some link\" target=\"_blank\">some link</a></p>"
+                      "<p>blah</p>"
+                      "<p>123 - Joe Bloggs</p>"
                       "\n\n"
                       "<h3>Another Entry Title</h3>"
-                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>123 :: Joe Smith<br><br>",
+                      "<p><a href=\"some link\" target=\"_blank\">some link</a></p>"
+                      "<p>blah</p>"
+                      "<p>123 - Joe Smith</p>",
                       feed_content)
 
         self.assertIn("<h2>NotARealSite</h2>"
-                      "<br><br><a href=\"some other link\" target=\"_blank\">some other link</a>"
-                      "<br>lalala<br>"
+                      "<p>lalala</p>"
                       "<h3>Something interesting</h3>"
-                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>123 :: Joey Baloni<br><br>"
+                      "<p><a href=\"some link\" target=\"_blank\">some link</a></p>"
+                      "<p>blah</p>"
+                      "<p>123 - Joey Baloni</p>"
                       "\n\n"
                       "<h3>Something else</h3>"
-                      "<br><a href=\"some link\" target=\"_blank\">some link</a>"
-                      "<br>blah"
-                      "<br>123 :: Joey Baloni<br><br>",
+                      "<p><a href=\"some link\" target=\"_blank\">some link</a></p>"
+                      "<p>blah</p>"
+                      "<p>123 - Joey Baloni</p>",
                       feed_content)
 
     @parameterized.expand([
