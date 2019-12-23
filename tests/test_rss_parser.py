@@ -31,7 +31,7 @@ class TestRssParsing(unittest.TestCase):
         self.assertIn("FierceWireless", feed_content)
 
         # And: the Item details are returned
-        self.assertIn("Industry Voices—Pongratz", feed_content)
+        self.assertIn("Industry Voices", feed_content)
         self.assertIn("Stefan Pongratz", feed_content)
 
     @patch("feedparser.parse")
