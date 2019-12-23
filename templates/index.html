@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ page_title }}</title>
+    <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
     <p>
         <a href="/config">Configure RSS Feed URLs</a>
     </p>
     {% for feed_item in feed_content %}
-    <p>{{ feed_item|safe }}</p>
+    <p class="item">{{ feed_item|safe }}</p>
     {% endfor %}
 </body>
 </html>

@@ -1,0 +1,19 @@
+body {
+    margin: 5;
+    padding: 5;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #444;
+    background-color: lightblue;
+}
+
+h2 {
+    color: blue;
+    text-align: center;
+}
+
+.item {
+    padding: 10px 0 30px 0;
+    background-color: #E6E6FA;
+    border-style: solid;
+    border-width: 3px;
+}
