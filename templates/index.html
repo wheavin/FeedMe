@@ -6,11 +6,16 @@
     <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
-    <p>
-        <a href="/config">Configure RSS Feed URLs</a>
-    </p>
-    {% for feed_item in feed_content %}
-    <p class="item">{{ feed_item|safe }}</p>
-    {% endfor %}
+    <div class="banner">
+        <h1>FeedMe</h1>
+    </div>
+    <div class="content">
+        <p>
+            <a href="/config">Configure RSS Feed URLs</a>
+        </p>
+        {% for feed_item in feed_content %}
+        <p class="item">{{ feed_item|safe }}</p>
+        {% endfor %}
+    </div>
 </body>
 </html>
