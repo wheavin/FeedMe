@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # activate virtual environment
-. env/bin/activate
+. */bin/activate
 
 # run all unit tests
 python3 tester.py

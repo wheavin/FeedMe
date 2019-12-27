@@ -9,10 +9,10 @@
     <div class="banner">
         <h1>FeedMe</h1>
     </div>
+    <div class="menu">
+        <a href="/config">Configure RSS Feed URLs</a>
+    </div>
     <div class="content">
-        <p>
-            <a href="/config">Configure RSS Feed URLs</a>
-        </p>
         {% for feed_item in feed_content %}
         <p class="item">{{ feed_item|safe }}</p>
         {% endfor %}
