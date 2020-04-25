@@ -55,9 +55,14 @@ def create():
     if request.form:
         if request.form.get("url"):
             rss_feed_url = RssFeedUrl(url=request.form.get("url"))
-            DB.session.add(rss_feed_url)
-            DB.session.commit()
-            print("Added RSS feed URL: {}".format(rss_feed_url))
+
+            url_already_added = RssFeedUrl.query.filter_by(url=rss_feed_url).first()
+            if url_already_added:
+                flash("URL already added. Please provide a unique URL")
+            else:
+                DB.session.add(rss_feed_url)
+                DB.session.commit()
+                print("Added RSS feed URL: {}".format(rss_feed_url))
         else:
             flash("Please provide a valid URL")
 

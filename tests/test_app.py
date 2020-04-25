@@ -44,9 +44,8 @@ class TestFeedMeApp(unittest.TestCase):
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"No RSS feed content to display", response.data)
 
-    @patch("app.DB")
     @patch("app.RssFeedUrl")
-    def test_create_rss_feed_url_entry(self, mock_rss_feed_url, mock_db):
+    def test_create_rss_feed_url_entry(self, mock_rss_feed_url):
         # Given: an new RSS feed URL
         rss_feed_url = RssFeedUrl()
         rss_feed_url.url = "https://www.fiercewireless.com/rss/xml"
@@ -59,9 +58,36 @@ class TestFeedMeApp(unittest.TestCase):
             follow_redirects=True
         )
         # Then: the config page is reloaded with new entry
-        assert mock_db.session.add.called
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"https://www.fiercewireless.com/rss/xml", response.data)
+
+    @patch("app.RssFeedUrl")
+    def test_create_rss_feed_url_entry_duplicate(self, mock_rss_feed_url):
+        # Given: an new RSS feed URL
+        rss_feed_url = RssFeedUrl()
+        rss_feed_url.url = "https://www.fiercewireless.com/rss/xml"
+        mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
+        mock_rss_feed_url.query.all.return_value = [rss_feed_url]
+
+        # When: a new RSS feed URL is added
+        response = FEEDME_APP.test_client().post(
+            "/config",
+            data=dict(url="https://www.fiercewireless.com/rss/xml"),
+            follow_redirects=True
+        )
+        # Then: the config page is reloaded with new entry
+        self.assertEqual(HTTP_SUCCESS, response.status_code)
+        self.assertIn(b"https://www.fiercewireless.com/rss/xml", response.data)
+
+        # When: the same RSS feed URL is added again
+        response = FEEDME_APP.test_client().post(
+            "/config",
+            data=dict(url="https://www.fiercewireless.com/rss/xml"),
+            follow_redirects=True
+        )
+        # Then: the entry will not be added again
+        self.assertEqual(HTTP_SUCCESS, response.status_code)
+        self.assertIn(b"URL already added. Please provide a unique URL", response.data)
 
     def test_create_rss_feed_url_entry_with_empty_data(self):
         # When: a blank RSS feed URL is added
