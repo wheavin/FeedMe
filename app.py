@@ -37,13 +37,23 @@ def refresh_feed():
     """
     print("Refreshing RSS feed content")
     rss_feed_url_entries = RssFeedUrl.query.all()
-    rss_feed_urls = []
-    for entry in rss_feed_url_entries:
-        rss_feed_urls.append(entry.url)
+    rss_feed_urls = [entry.url for entry in rss_feed_url_entries]
 
     rss_feed = Feed(rss_feed_urls)
     feed_content = rss_feed.refresh_content()
     return render_template("index.html", page_title="FeedMe", feed_content=feed_content)
+
+
+@FEEDME_APP.route("/new")
+def show_feed():
+    """
+    Displays the RSS Feed item URLs.
+    :return: main web page containing RSS feed item URLs.
+    """
+    print("Loading home page")
+    rss_feed_url_entries = RssFeedUrl.query.all()
+    rss_feed_urls = [entry.url for entry in rss_feed_url_entries]
+    return render_template("index_new.html", page_title="FeedMe", rss_feed_urls=rss_feed_urls)
 
 
 @FEEDME_APP.route("/config", methods=["GET", "POST"])

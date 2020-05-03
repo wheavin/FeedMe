@@ -1,5 +1,5 @@
 body {
-    margin: 15;
+    margin: 30px;
     padding: 15;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #444;
@@ -14,8 +14,20 @@ h2 {
     border-width: 1px;
 }
 
+ul {
+    list-style: none;
+}
+
+a:link {
+    color: darkgray;
+}
+
+a:hover {
+    color: lightgray;
+}
+
 .banner {
-    margin: 20px;
+    margin: 10px;
     color: lightgray;
     text-align: center;
     background-color: black;
@@ -25,6 +37,26 @@ h2 {
 
 .content {
     margin: 40px;
+}
+
+.menu {
+    margin: 10px;
+    padding: 5px;
+    color: darkgray;
+    background-color: darkred
+}
+
+.feed_links {
+    margin: 10px;
+    padding: 5px;
+    float: left;
+    color: darkgray;
+    background-color: black;
+}
+
+.feed_content {
+    margin: 20px;
+    float: left;
 }
 
 .url_entry {

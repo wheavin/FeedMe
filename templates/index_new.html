@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+    <link rel="stylesheet" href="/static/main.css">
+    <!--<link rel="stylesheet" href="main.css">-->
+</head>
+<body>
+    <div class="banner">
+        <h1>FeedMe</h1>
+    </div>
+    <div class="menu">
+        <a href="/config">Configure RSS Feed URLs</a>
+    </div>
+    <div class="feed_links">
+        <ul>
+            {% for rss_feed_url in rss_feed_urls %}
+            <li><a class="item" href="{{ rss_feed_url|safe }}">{{ rss_feed_url|safe }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="feed_content">
+        <p class="current_rss_feed">Feed content goes here</p>
+    </div>
+</body>
+</html>
