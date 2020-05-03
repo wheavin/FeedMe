@@ -5,6 +5,7 @@
     <title>{{ page_title }}</title>
     <link rel="stylesheet" href="/static/main.css">
     <!--<link rel="stylesheet" href="main.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 <body>
     <div class="banner">
@@ -16,12 +17,32 @@
     <div class="feed_links">
         <ul>
             {% for rss_feed_url in rss_feed_urls %}
-            <li><a class="item" href="{{ rss_feed_url|safe }}">{{ rss_feed_url|safe }}</a></li>
+            <li><a class="rss_url_item" href="#">{{ rss_feed_url|safe }}</a></li>
             {% endfor %}
         </ul>
     </div>
     <div class="feed_content">
-        <p class="current_rss_feed">Feed content goes here</p>
+        <p id="current_rss_feed">Feed content goes here</p>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".rss_url_item").click(function() {
+                var rss_feed_url = $(this).text()
+                $.ajax({
+                    url: "/new/content?url=" + rss_feed_url,
+                    type: "get",
+                    success: function(response) {
+                        $("#current_rss_feed").html(response)
+                    },
+                    error: function(xhr) {
+                        // handle error
+                    }
+                });
+            }); 
+        });
+
+
+    </script>
 </body>
 </html>

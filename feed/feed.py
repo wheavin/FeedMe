@@ -11,7 +11,7 @@ class Feed:
     RSS feed data.
     """
 
-    def __init__(self, rss_feed_urls):
+    def __init__(self, rss_feed_urls=None):
         self.rss_feed_urls = rss_feed_urls
 
     def refresh_content(self):

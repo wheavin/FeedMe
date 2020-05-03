@@ -56,6 +56,15 @@ def show_feed():
     return render_template("index_new.html", page_title="FeedMe", rss_feed_urls=rss_feed_urls)
 
 
+@FEEDME_APP.route("/new/content", methods=["GET"])
+def fetch_feed_content():
+    print("Fetching RSS feed content for " + request.args["url"])
+    url = request.args.get("url")
+    rss_feed = Feed()
+    feed_content = rss_feed.fetch_content_for_feed_url(url)
+    return feed_content
+
+
 @FEEDME_APP.route("/config", methods=["GET", "POST"])
 def create():
     """
