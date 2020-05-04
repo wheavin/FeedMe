@@ -12,7 +12,7 @@ class TestFeedMeApp(unittest.TestCase):
 
     @patch("feedparser.parse")
     @patch("app.RssFeedUrl")
-    def test_load_home_with_valid_url(self, mock_rss_feed_url, mock_response):
+    def test_load_home_with_valid_url_old_version(self, mock_rss_feed_url, mock_response):
         # Given: a valid RSS Feed config
         rss_feed_url = RssFeedUrl()
         rss_feed_url.url = "https://www.fiercewireless.com/rss/xml"
@@ -24,35 +24,35 @@ class TestFeedMeApp(unittest.TestCase):
                          "published": "123"}]
         }
         # When: the root path is loaded
-        response = FEEDME_APP.test_client().get("/")
+        response = FEEDME_APP.test_client().get("/old")
 
         # Then: the RSS feed content is successfully returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"FierceWireless", response.data)
 
     @patch("feedparser.parse")
-    def test_load_home_with_no_valid_urls(self, mock_response):
+    def test_load_home_with_no_valid_urls_old_version(self, mock_response):
         # Given: an invalid RSS Feed config
         mock_response.return_value = {
             'entries': [], 'bozo': 1,
             'bozo_exception': TypeError("a bytes-like object is required, not 'RssFeedUrl'", ), 'feed': {}
         }
         # When: the root path is loaded
-        response = FEEDME_APP.test_client().get("/")
+        response = FEEDME_APP.test_client().get("/old")
 
         # Then: no RSS feed content is returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"No RSS feed content to display", response.data)
 
     @patch("app.RssFeedUrl")
-    def test_load_home_with_valid_url_new_version(self, mock_rss_feed_url):
+    def test_load_home_with_valid_url(self, mock_rss_feed_url):
         # Given: a valid RSS Feed config
         rss_feed_url = RssFeedUrl()
         rss_feed_url.url = "https://www.fiercewireless.com/rss/xml"
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
         # When: the root path is loaded
-        response = FEEDME_APP.test_client().get("/new")
+        response = FEEDME_APP.test_client().get("/")
 
         # Then: the RSS feed content is successfully returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
@@ -68,7 +68,7 @@ class TestFeedMeApp(unittest.TestCase):
                          "published": "123"}]
         }
         # When the RSS feed content is fetched for URL
-        response = FEEDME_APP.test_client().get("/new/content?url=" + rss_feed_url)
+        response = FEEDME_APP.test_client().get("/content?url=" + rss_feed_url)
 
         # Then the feed content for URL is returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
@@ -83,7 +83,7 @@ class TestFeedMeApp(unittest.TestCase):
             'bozo_exception': TypeError("a bytes-like object is required, not 'RssFeedUrl'", ), 'feed': {}
         }
         # When: the root path is loaded
-        response = FEEDME_APP.test_client().get("/new/content?url=" + rss_feed_url)
+        response = FEEDME_APP.test_client().get("/content?url=" + rss_feed_url)
 
         # Then: no RSS feed content is returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)

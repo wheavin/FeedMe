@@ -29,7 +29,7 @@ class RssFeedUrl(DB.Model):
         return "<RssFeedUrl: {}>".format(self.url)
 
 
-@FEEDME_APP.route("/")
+@FEEDME_APP.route("/old")
 def refresh_feed():
     """
     Refreshes RSS feed content for the configured RSS feed URLs.
@@ -41,10 +41,10 @@ def refresh_feed():
 
     rss_feed = Feed(rss_feed_urls)
     feed_content = rss_feed.refresh_content()
-    return render_template("index.html", page_title="FeedMe", feed_content=feed_content)
+    return render_template("index_old.html", page_title="FeedMe", feed_content=feed_content)
 
 
-@FEEDME_APP.route("/new")
+@FEEDME_APP.route("/")
 def show_feed():
     """
     Displays the RSS Feed item URLs.
@@ -53,10 +53,10 @@ def show_feed():
     print("Loading home page")
     rss_feed_url_entries = RssFeedUrl.query.all()
     rss_feed_urls = [entry.url for entry in rss_feed_url_entries]
-    return render_template("index_new.html", page_title="FeedMe", rss_feed_urls=rss_feed_urls)
+    return render_template("index.html", page_title="FeedMe", rss_feed_urls=rss_feed_urls)
 
 
-@FEEDME_APP.route("/new/content", methods=["GET"])
+@FEEDME_APP.route("/content", methods=["GET"])
 def fetch_feed_content():
     print("Fetching RSS feed content for " + request.args["url"])
     url = request.args.get("url")
@@ -74,8 +74,9 @@ def create():
     if request.form:
         if request.form.get("url"):
             rss_feed_url = RssFeedUrl(url=request.form.get("url"))
+            print("Adding: " + rss_feed_url.url)
 
-            url_already_added = RssFeedUrl.query.filter_by(url=rss_feed_url).first()
+            url_already_added = RssFeedUrl.query.filter_by(url=rss_feed_url.url).first()
             if url_already_added:
                 flash("URL already added. Please provide a unique URL")
             else:

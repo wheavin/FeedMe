@@ -18,16 +18,20 @@ ul {
     list-style: none;
 }
 
-a:link {
-    color: darkgray;
+a:link, a:visited {
+    color: azure;
 }
 
 a:hover {
-    color: lightgray;
+    color: darkgray;
 }
 
-.banner {
+#banner, #menu, #feed_links {
     margin: 10px;
+    border-radius: 15px;
+}
+
+#banner {
     color: lightgray;
     text-align: center;
     background-color: black;
@@ -35,33 +39,37 @@ a:hover {
     border-width: 3px;
 }
 
-.content {
-    margin: 40px;
-}
-
-.menu {
-    margin: 10px;
+#menu {
     padding: 5px;
     color: darkgray;
-    background-color: darkred
+    background-color: darkred;
 }
 
-.feed_links {
-    margin: 10px;
+#menu a {
+    font-size: 12px;
+}
+
+#feed_links {
     padding: 5px;
+    width: 250px;
     float: left;
     color: darkgray;
     background-color: black;
 }
 
-.feed_content {
+#feed_content {
     margin: 20px;
-    float: right;
+    width: 800px;
+    float: left;
 }
 
 .url_entry {
     text-align: center;
     display: flex;
     flex-direction: row;
-    align-items: flex-start
+    align-items: flex-start;
+}
+
+.inline div {
+    display:inline-block;
 }

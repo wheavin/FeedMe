@@ -4,18 +4,51 @@
     <meta charset="UTF-8">
     <title>{{ page_title }}</title>
     <link rel="stylesheet" href="/static/main.css">
+    <!--<link rel="stylesheet" href="main.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 <body>
-    <div class="banner">
+    <div id="banner">
         <h1>FeedMe</h1>
     </div>
-    <div class="menu">
+    <div id="menu">
         <a href="/config">Configure RSS Feed URLs</a>
     </div>
-    <div class="content">
-        {% for feed_item in feed_content %}
-        <p class="item">{{ feed_item|safe }}</p>
-        {% endfor %}
+    <div class="inline">
+        <div id="feed_links">
+            <ul>
+                {% for rss_feed_url in rss_feed_urls %}
+                <li><a class="rss_url_item" href="#">{{ rss_feed_url|safe }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="feed_content">
+            <p id="current_rss_feed">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.
+            </p>
+        </div>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".rss_url_item").click(function() {
+                var rss_feed_url = $(this).text()
+                $.ajax({
+                    url: "/content?url=" + rss_feed_url,
+                    type: "get",
+                    success: function(response) {
+                        $("#current_rss_feed").html(response)
+                    },
+                    error: function(xhr) {
+                        // handle error
+                    }
+                });
+            }); 
+        });
+    </script>
 </body>
 </html>
