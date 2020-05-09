@@ -6,7 +6,7 @@ REST endpoints for FeedMe app.
 from flask import Flask, render_template, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 
-from feed.feed import Feed
+from feed import feed
 from utils.files import get_full_path
 
 DATABASE_FILE = "sqlite:///{}".format(get_full_path("urldatabase.db"))
@@ -29,21 +29,6 @@ class RssFeedUrl(DB.Model):
         return "<RssFeedUrl: {}>".format(self.url)
 
 
-@FEEDME_APP.route("/old")
-def refresh_feed():
-    """
-    Refreshes RSS feed content for the configured RSS feed URLs.
-    :return: main web page containing updated RSS feed content.
-    """
-    print("Refreshing RSS feed content")
-    rss_feed_url_entries = RssFeedUrl.query.all()
-    rss_feed_urls = [entry.url for entry in rss_feed_url_entries]
-
-    rss_feed = Feed(rss_feed_urls)
-    feed_content = rss_feed.refresh_content()
-    return render_template("index_old.html", page_title="FeedMe", feed_content=feed_content)
-
-
 @FEEDME_APP.route("/")
 def show_feed():
     """
@@ -60,8 +45,7 @@ def show_feed():
 def fetch_feed_content():
     print("Fetching RSS feed content for " + request.args["url"])
     url = request.args.get("url")
-    rss_feed = Feed()
-    feed_content = rss_feed.fetch_content_for_feed_url(url)
+    feed_content = feed.fetch_content_for_feed_url(url)
     return feed_content
 
 
