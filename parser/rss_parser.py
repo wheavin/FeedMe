@@ -12,7 +12,7 @@ def _validate_rss_channel(rss_feed):
     if "feed" not in rss_feed or "entries" not in rss_feed:
         raise RssParserError("Invalid RSS channel data: %s" % rss_feed)
     feed = rss_feed['feed']
-    if "title" not in feed or "link" not in feed or "description" not in feed:
+    if "title" not in feed or "link" not in feed:
         raise RssParserError("Invalid RSS channel data: %s" % rss_feed)
 
 
@@ -21,7 +21,12 @@ def _create_rss_channel(rss_feed):
     feed = rss_feed['feed']
     title = feed['title']
     link = feed['link']
-    description = feed['description']
+
+    try:
+        description = feed['description']
+    except KeyError:
+        description = feed['subtitle']
+
     items = rss_feed['entries']
     return RssChannel(title, link, description, items)
 

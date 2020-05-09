@@ -5,7 +5,7 @@ RSS feed channel.
 
 
 def _validate_item(item):
-    elements = ["title", "link", "summary", "published", "author"]
+    elements = ["title", "link", "summary"]
     if not all(element in item for element in elements) or not all(item[element] for element in elements):
         raise RssItemError("Invalid RSS channel entry data: %s" % item)
 
@@ -19,11 +19,22 @@ def _parse_items(items):
         title = item['title']
         link = item['link']
         summary = item['summary']
-        published = item['published'].replace("+0000", "").rstrip()
-        author = item['author']
+        published = _extract_key(item=item, key="published", alternate="updated")
+        author = _extract_key(item=item, key="author", alternate=None)
         rss_item = RssItem(title, link, summary, published, author)
         rss_items.append(rss_item.format_item_content())
     return rss_items
+
+
+def _extract_key(item, key, alternate):
+    try:
+        value = item[key]
+    except KeyError:
+        try:
+            value = item[alternate] if alternate else None
+        except KeyError:
+            value = None
+    return value
 
 
 class RssChannel:

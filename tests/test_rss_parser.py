@@ -10,18 +10,19 @@ from parser.rss_parser import RssUrlParser, RssParserError
 from utils.file_reader import JsonFileReader
 from utils.files import get_full_path
 
-TESTDATA_FILENAME = get_full_path("tests", "test_data", "rss_sample.json")
+TESTDATA_FILENAME_1 = get_full_path("tests", "test_data", "rss_sample.json")
+TESTDATA_FILENAME_2 = get_full_path("tests", "test_data", "rss_sample_2.json")
 
 
 class TestRssParsing(unittest.TestCase):
 
     @patch("feedparser.parse")
-    def test_parse_rss(self, mock_response):
+    def test_parse_rss_dataset_1(self, mock_response):
         # Given: an RSS feed URL to be parsed
         url = "https://www.fiercewireless.com/rss/xml"
         obj_under_test = RssUrlParser(url)
 
-        file_reader = JsonFileReader(TESTDATA_FILENAME)
+        file_reader = JsonFileReader(TESTDATA_FILENAME_1)
         mock_response.return_value = file_reader.read()
 
         # When: the URL is parsed
@@ -33,6 +34,25 @@ class TestRssParsing(unittest.TestCase):
         # And: the Item details are returned
         self.assertIn("Industry Voices", feed_content)
         self.assertIn("Stefan Pongratz", feed_content)
+
+    @patch("feedparser.parse")
+    def test_parse_rss_dataset_2(self, mock_response):
+        # Given: an RSS feed URL to be parsed
+        url = "https://martinfowler.com/feed.atom"
+        obj_under_test = RssUrlParser(url)
+
+        file_reader = JsonFileReader(TESTDATA_FILENAME_2)
+        mock_response.return_value = file_reader.read()
+
+        # When: the URL is parsed
+        feed_content = obj_under_test.parse()
+
+        # Then: the channel details are returned
+        self.assertIn("Martin Fowler", feed_content)
+
+        # And: the Item details are returned
+        self.assertIn("Reviewed Commits", feed_content)
+        self.assertIn("Comparing Feature Branching and Continuous Integration", feed_content)
 
     @patch("feedparser.parse")
     def test_parse_rss_with_no_entries(self, mock_response):
@@ -117,10 +137,6 @@ class TestRssParsing(unittest.TestCase):
         ["No summary element", {
             "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
             "entries": [{"title": "Some Entry Title", "link": "some link", "author": "Joe Bloggs"}]
-        }],
-        ["No published element", {
-            "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
-            "entries": [{"title": "Some Entry Title", "link": "some link", "author": "Joe Bloggs", "summary": "blah"}]
         }],
         ["Null title element", {
             "feed": {"title": "Some Title", "link": "some link", "description": "blah"},

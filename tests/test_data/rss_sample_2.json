@@ -1,0 +1,133 @@
+{
+  "href": "https://martinfowler.com/feed.atom",
+  "feed": {
+    "href": "https://martinfowler.com",
+    "id": "https://martinfowler.com/feed.atom",
+    "subtitle": "Master feed of news and updates from martinfowler.com",
+    "updated": "2020-05-04T09:07:00-04:00",
+    "link": "https://martinfowler.com",
+    "author": "Martin Fowler (fowler@acm.org)",
+    "authors": [
+      {
+        "href": "https://martinfowler.com",
+        "email": "fowler@acm.org",
+        "name": "Martin Fowler"
+      }
+    ],
+    "subtitle_detail": {
+      "type": "text/plain",
+      "value": "Master feed of news and updates from martinfowler.com",
+      "base": "https://martinfowler.com/feed.atom"
+    },
+    "title_detail": {
+      "type": "text/plain",
+      "value": "Martin Fowler",
+      "base": "https://martinfowler.com/feed.atom"
+    },
+    "title": "Martin Fowler",
+    "links": [
+      {
+        "rel": "self",
+        "href": "https://martinfowler.com/feed.atom",
+        "type": "application/atom+xml"
+      },
+      {
+        "href": "https://martinfowler.com",
+        "rel": "alternate",
+        "type": "text/html"
+      }
+    ],
+    "author_detail": {
+      "href": "https://martinfowler.com",
+      "email": "fowler@acm.org",
+      "name": "Martin Fowler"
+    }
+  },
+  "updated": "Mon, 04 May 2020 14:27:30 GMT",
+  "namespaces": {
+    "": "http://www.w3.org/2005/Atom"
+  },
+  "headers": {
+    "Content-Length": "67514",
+    "Accept-Ranges": "bytes",
+    "Last-Modified": "Mon, 04 May 2020 14:27:30 GMT",
+    "Date": "Mon, 04 May 2020 19:19:23 GMT",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains;",
+    "Server": "Apache",
+    "Connection": "close",
+    "Content-Type": "application/atom+xml"
+  },
+  "status": 200,
+  "bozo": 0,
+  "version": "atom10",
+  "entries": [
+    {
+      "summary": "<div class = 'img'><a href = 'https://martinfowler.com/articles/branching-patterns.html#reviewed-commits'><img src = 'https://martinfowler.com/articles/branching-patterns/card.png#reviewed-commits', width = '350px',></img></a></div>\n\n<p>Reviewed Commits: every commit to mainline is peer-reviewed before the\n      commit is accepted</p>\n\n<p><a class = 'more' href = 'https://martinfowler.com/articles/branching-patterns.html#reviewed-commits'>more…</a></p>",
+      "id": "tag:martinfowler.com,2020-05-04:Branching-Patterns--Reviewed-Commits",
+      "content": [
+        {
+          "type": "text/html",
+          "value": "<div class = 'img'><a href = 'https://martinfowler.com/articles/branching-patterns.html#reviewed-commits'><img src = 'https://martinfowler.com/articles/branching-patterns/card.png#reviewed-commits', width = '350px',></img></a></div>\n\n<p>Reviewed Commits: every commit to mainline is peer-reviewed before the\n      commit is accepted</p>\n\n<p><a class = 'more' href = 'https://martinfowler.com/articles/branching-patterns.html#reviewed-commits'>more…</a></p>"
+        }
+      ],
+      "updated": "2020-05-04T09:07:00-04:00",
+      "title_detail": {
+        "type": "text/plain",
+        "value": "Branching Patterns: Reviewed Commits",
+        "base": "https://martinfowler.com/feed.atom"
+      },
+      "tags": [
+        {
+          "scheme": "None",
+          "label": "None",
+          "term": "skip-home-page"
+        }
+      ],
+      "title": "Branching Patterns: Reviewed Commits",
+      "link": "https://martinfowler.com/articles/branching-patterns.html#reviewed-commits",
+      "links": [
+        {
+          "href": "https://martinfowler.com/articles/branching-patterns.html#reviewed-commits",
+          "rel": "alternate",
+          "type": "text/html"
+        }
+      ]
+    },
+    {
+      "summary": "<div class = 'img'><a href = 'https: //martinfowler.com/articles/branching-patterns.html#ComparingFeatureBranchingAndContinuousIntegration'><img src = 'https://martinfowler.com/articles/branching-patterns/card.png#ComparingFeatureBranchingAndContinuousIntegration', width = '350px',></img></a></div>\n\n<p>Feature Branching appears to be the most common branching strategy in\n      the industry at the moment, but there is a vocal group of practitioners\n      who argue that Continuous Integration is usually a superior approach. </p>\n\n<p><a class = 'more' href = 'https://martinfowler.com/articles/branching-patterns.html#ComparingFeatureBranchingAndContinuousIntegration'>more…</a></p>",
+      "id": "tag:martinfowler.com,2020-04-30:Branching-Patterns--Comparing-Feature-Branching-and-Continuous-Integration",
+      "content": [
+        {
+          "type": "text/html",
+          "value": "<div class = 'img'><a href = 'https: //martinfowler.com/articles/branching-patterns.html#ComparingFeatureBranchingAndContinuousIntegration'><img src = 'https://martinfowler.com/articles/branching-patterns/card.png#ComparingFeatureBranchingAndContinuousIntegration', width = '350px',></img></a></div>\n\n<p>Feature Branching appears to be the most common branching strategy in\n      the industry at the moment, but there is a vocal group of practitioners\n      who argue that Continuous Integration is usually a superior approach. </p>\n\n<p><a class = 'more' href = 'https://martinfowler.com/articles/branching-patterns.html#ComparingFeatureBranchingAndContinuousIntegration'>more…</a></p>",
+          "base": "https://martinfowler.com/feed.atom",
+          "language": "None"
+        }
+      ],
+      "updated": "2020-04-30T09:33:00-04:00",
+      "title_detail": {
+        "type": "text/plain",
+        "value": "Branching Patterns: Comparing Feature Branching and Continuous Integration",
+        "base": "https://martinfowler.com/feed.atom",
+        "language": "None"
+      },
+      "tags": [
+        {
+          "scheme": "None",
+          "label": "None",
+          "term": "skip-home-page"
+        }
+      ],
+      "title": "Branching Patterns: Comparing Feature Branching and Continuous Integration",
+      "link": "https://martinfowler.com/articles/branching-patterns.html#ComparingFeatureBranchingAndContinuousIntegration",
+      "links": [
+        {
+          "href": "https://martinfowler.com/articles/branching-patterns.html#ComparingFeatureBranchingAndContinuousIntegration",
+          "rel": "alternate",
+          "type": "text/html"
+        }
+      ]
+    }
+  ],
+  "encoding": "utf-8"
+}
