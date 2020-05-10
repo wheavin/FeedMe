@@ -39,8 +39,14 @@ a:hover {
     border-width: 3px;
 }
 
+#content {
+    margin: 10px;
+    padding: 10px;
+}
+
 #menu {
     padding: 5px;
+    padding-left: 20px;
     color: darkgray;
     background-color: darkred;
 }
@@ -55,12 +61,17 @@ a:hover {
     float: left;
     color: darkgray;
     background-color: black;
+    font-size: 12px;
 }
 
 #feed_content {
-    margin: 20px;
+    margin: 40px;
+    margin-top: 10px;
+    padding: 10px;
     width: 800px;
     float: left;
+    color: azure;
+    background-color: black;
 }
 
 .url_entry {
