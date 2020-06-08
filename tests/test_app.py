@@ -3,7 +3,7 @@
 import unittest
 from unittest.mock import patch
 
-from app import FEEDME_APP, RssFeedUrl
+from app import feedme_app, RssFeedUrl
 
 HTTP_SUCCESS = 200
 
@@ -18,7 +18,7 @@ class TestFeedMeApp(unittest.TestCase):
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
         # When: the root path is loaded
-        response = FEEDME_APP.test_client().get("/")
+        response = feedme_app.test_client().get("/")
 
         # Then: the RSS feed content is successfully returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
@@ -34,7 +34,7 @@ class TestFeedMeApp(unittest.TestCase):
                          "published": "123"}]
         }
         # When the RSS feed content is fetched for URL
-        response = FEEDME_APP.test_client().get("/content?url=" + rss_feed_url)
+        response = feedme_app.test_client().get("/content?url=" + rss_feed_url)
 
         # Then the feed content for URL is returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
@@ -49,7 +49,7 @@ class TestFeedMeApp(unittest.TestCase):
             'bozo_exception': TypeError("a bytes-like object is required, not 'RssFeedUrl'", ), 'feed': {}
         }
         # When: the root path is loaded
-        response = FEEDME_APP.test_client().get("/content?url=" + rss_feed_url)
+        response = feedme_app.test_client().get("/content?url=" + rss_feed_url)
 
         # Then: no RSS feed content is returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
@@ -63,7 +63,7 @@ class TestFeedMeApp(unittest.TestCase):
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
         # When: a new RSS feed URL is added
-        response = FEEDME_APP.test_client().post(
+        response = feedme_app.test_client().post(
             "/config",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
             follow_redirects=True
@@ -81,7 +81,7 @@ class TestFeedMeApp(unittest.TestCase):
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
         # When: a new RSS feed URL is added
-        response = FEEDME_APP.test_client().post(
+        response = feedme_app.test_client().post(
             "/config",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
             follow_redirects=True
@@ -91,7 +91,7 @@ class TestFeedMeApp(unittest.TestCase):
         self.assertIn(b"https://www.fiercewireless.com/rss/xml", response.data)
 
         # When: the same RSS feed URL is added again
-        response = FEEDME_APP.test_client().post(
+        response = feedme_app.test_client().post(
             "/config",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
             follow_redirects=True
@@ -102,7 +102,7 @@ class TestFeedMeApp(unittest.TestCase):
 
     def test_create_rss_feed_url_entry_with_empty_data(self):
         # When: a blank RSS feed URL is added
-        response = FEEDME_APP.test_client().post(
+        response = feedme_app.test_client().post(
             "/config",
             data=dict(url=""),
             follow_redirects=True
@@ -111,7 +111,7 @@ class TestFeedMeApp(unittest.TestCase):
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"Please provide a valid URL", response.data)
 
-    @patch("app.DB")
+    @patch("app.db")
     @patch("app.RssFeedUrl")
     def test_update_rss_feed_url_entry(self, mock_rss_feed_url, mock_db):
         # Given: an RSS feel URL entry
@@ -120,7 +120,7 @@ class TestFeedMeApp(unittest.TestCase):
         mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
 
         # When: the RSS feed URL entry is updated
-        response = FEEDME_APP.test_client().post(
+        response = feedme_app.test_client().post(
             "/update",
             data=dict(
                 new_url="https://www.someothersite.com/rss/xml", old_url="https://www.fiercewireless.com/rss/xml"),
@@ -130,7 +130,7 @@ class TestFeedMeApp(unittest.TestCase):
         assert mock_db.session.commit.called
         self.assertEqual(HTTP_SUCCESS, response.status_code)
 
-    @patch("app.DB")
+    @patch("app.db")
     @patch("app.RssFeedUrl")
     def test_delete_rss_feed_url_entry(self, mock_rss_feed_url, mock_db):
         # Given: an RSS feel URL entry
@@ -139,7 +139,7 @@ class TestFeedMeApp(unittest.TestCase):
         mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
 
         # When: the RSS feed URL entry is deleted
-        response = FEEDME_APP.test_client().post(
+        response = feedme_app.test_client().post(
             "/delete",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
             follow_redirects=True

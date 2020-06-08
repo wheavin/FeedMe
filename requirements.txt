@@ -3,3 +3,6 @@ feedparser
 Flask
 flask-sqlalchemy
 flask-migrate
+flask-login
+flask-wtf
+bcrypt

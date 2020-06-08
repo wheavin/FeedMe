@@ -2,7 +2,6 @@
 """
 Responsible for handling the RSS feed data.
 """
-
 from parser.rss_parser import RssUrlParser, RssParserError
 
 

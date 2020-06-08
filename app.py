@@ -4,32 +4,37 @@ REST endpoints for FeedMe app.
 """
 
 from flask import Flask, render_template, request, redirect, flash
+from flask_login import LoginManager, login_user
 from flask_sqlalchemy import SQLAlchemy
 
 from feed import feed
+from user.user import User
+from user.user_login import LoginForm
 from utils.files import get_full_path
 
 DATABASE_FILE = "sqlite:///{}".format(get_full_path("urldatabase.db"))
 
-FEEDME_APP = Flask(__name__)
-FEEDME_APP.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-FEEDME_APP.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_FILE
-FEEDME_APP.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
+feedme_app = Flask(__name__)
+feedme_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+feedme_app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_FILE
+feedme_app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
 
-DB = SQLAlchemy(FEEDME_APP)
+db = SQLAlchemy(feedme_app)
+
+login_manager = LoginManager()
 
 
-class RssFeedUrl(DB.Model):
+class RssFeedUrl(db.Model):
     """
     DB model for Rss Feed URL.
     """
-    url = DB.Column(DB.String(80), unique=True, nullable=False, primary_key=True)
+    url = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
 
     def __repr__(self):
         return "<RssFeedUrl: {}>".format(self.url)
 
 
-@FEEDME_APP.route("/")
+@feedme_app.route("/")
 def show_feed():
     """
     Displays the RSS Feed item URLs.
@@ -41,7 +46,7 @@ def show_feed():
     return render_template("index.html", page_title="FeedMe", rss_feed_urls=rss_feed_urls)
 
 
-@FEEDME_APP.route("/content", methods=["GET"])
+@feedme_app.route("/content", methods=["GET"])
 def fetch_feed_content():
     print("Fetching RSS feed content for " + request.args["url"])
     url = request.args.get("url")
@@ -49,7 +54,7 @@ def fetch_feed_content():
     return feed_content
 
 
-@FEEDME_APP.route("/config", methods=["GET", "POST"])
+@feedme_app.route("/config", methods=["GET", "POST"])
 def create():
     """
     Adds new RSS feed URL to the database.
@@ -64,8 +69,8 @@ def create():
             if url_already_added:
                 flash("URL already added. Please provide a unique URL")
             else:
-                DB.session.add(rss_feed_url)
-                DB.session.commit()
+                db.session.add(rss_feed_url)
+                db.session.commit()
                 print("Added RSS feed URL: {}".format(rss_feed_url))
         else:
             flash("Please provide a valid URL")
@@ -74,7 +79,7 @@ def create():
     return render_template("urlconfig.html", rss_feed_urls=urls)
 
 
-@FEEDME_APP.route("/update", methods=["POST"])
+@feedme_app.route("/update", methods=["POST"])
 def update():
     """
     Updates URL for existing RSS feed URL entry.
@@ -84,12 +89,12 @@ def update():
     old_url = request.form.get("old_url")
     rss_feed_url = RssFeedUrl.query.filter_by(url=old_url).first()
     rss_feed_url.url = new_url
-    DB.session.commit()
+    db.session.commit()
     print("Updated RSS feed URL from {} to {}".format(old_url, new_url))
     return redirect("/config")
 
 
-@FEEDME_APP.route("/delete", methods=["POST"])
+@feedme_app.route("/delete", methods=["POST"])
 def delete():
     """
     Deletes RSS feed URL entry from the database.
@@ -97,11 +102,38 @@ def delete():
     """
     url = request.form.get("url")
     rss_feed_url = RssFeedUrl.query.filter_by(url=url).first()
-    DB.session.delete(rss_feed_url)
-    DB.session.commit()
+    db.session.delete(rss_feed_url)
+    db.session.commit()
     print("Deleted RSS feed URL {}".format(url))
     return redirect("/config")
 
 
+@feedme_app.route("/login", methods=["GET", "POST"])
+def login():
+    """
+    Logs in the user given provided user id and password.
+    :return: homepage if login successful, otherwise return login form.
+    """
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        user = User.query.get(login_form.email.data)
+        if user:
+            login_user(user)
+            flash("Logged in successfully")
+            return redirect("/")
+
+    return render_template("login.html", login_form=login_form)
+
+
+@login_manager.user_loader
+def user_loader(user_id):
+    """
+    Returns the associated User object for a given user id.
+    :param user_id: email of the user
+    :return: the User object
+    """
+    return User.query.get(user_id)
+
+
 if __name__ == '__main__':
-    FEEDME_APP.run()
+    feedme_app.run()
