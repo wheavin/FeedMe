@@ -3,7 +3,7 @@
 import unittest
 from unittest.mock import patch
 
-from app import feedme_app, RssFeedUrl
+from app.feedme_app import feedme_app, RssFeedUrl
 
 HTTP_SUCCESS = 200
 
@@ -13,7 +13,7 @@ class TestFeedMeApp(unittest.TestCase):
     def setUp(self):
         feedme_app.config["LOGIN_DISABLED"] = True
 
-    @patch("app.RssFeedUrl")
+    @patch("app.feedme_app.RssFeedUrl")
     def test_load_home_with_valid_url(self, mock_rss_feed_url):
         # Given: a valid RSS Feed config
         rss_feed_url = RssFeedUrl()
@@ -58,7 +58,7 @@ class TestFeedMeApp(unittest.TestCase):
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"No RSS feed content to display", response.data)
 
-    @patch("app.RssFeedUrl")
+    @patch("app.feedme_app.RssFeedUrl")
     def test_create_rss_feed_url_entry(self, mock_rss_feed_url):
         # Given: an new RSS feed URL
         rss_feed_url = RssFeedUrl()
@@ -75,7 +75,7 @@ class TestFeedMeApp(unittest.TestCase):
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"https://www.fiercewireless.com/rss/xml", response.data)
 
-    @patch("app.RssFeedUrl")
+    @patch("app.feedme_app.RssFeedUrl")
     def test_create_rss_feed_url_entry_duplicate(self, mock_rss_feed_url):
         # Given: an new RSS feed URL
         rss_feed_url = RssFeedUrl()
@@ -114,8 +114,8 @@ class TestFeedMeApp(unittest.TestCase):
         self.assertEqual(HTTP_SUCCESS, response.status_code)
         self.assertIn(b"Please provide a valid URL", response.data)
 
-    @patch("app.db")
-    @patch("app.RssFeedUrl")
+    @patch("app.feedme_app.db")
+    @patch("app.feedme_app.RssFeedUrl")
     def test_update_rss_feed_url_entry(self, mock_rss_feed_url, mock_db):
         # Given: an RSS feel URL entry
         rss_feed_url = RssFeedUrl()
@@ -133,8 +133,8 @@ class TestFeedMeApp(unittest.TestCase):
         assert mock_db.session.commit.called
         self.assertEqual(HTTP_SUCCESS, response.status_code)
 
-    @patch("app.db")
-    @patch("app.RssFeedUrl")
+    @patch("app.feedme_app.db")
+    @patch("app.feedme_app.RssFeedUrl")
     def test_delete_rss_feed_url_entry(self, mock_rss_feed_url, mock_db):
         # Given: an RSS feel URL entry
         rss_feed_url = RssFeedUrl()

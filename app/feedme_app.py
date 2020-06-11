@@ -5,8 +5,9 @@ REST endpoints for FeedMe app.
 
 import flask_bcrypt as bcrypt
 from flask import Flask, render_template, request, redirect, flash, abort
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import InvalidRequestError
 
 from feed import feed
 from user.user import User
@@ -16,7 +17,7 @@ from utils.urls import is_safe_url
 
 DATABASE_FILE = "sqlite:///{}".format(get_full_path("urldatabase.db"))
 
-feedme_app = Flask(__name__)
+feedme_app = Flask(__name__, template_folder="../templates", static_folder="../static")
 feedme_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 feedme_app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_FILE
 feedme_app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
@@ -133,7 +134,7 @@ def login():
 
         if user and bcrypt.check_password_hash(user.password, login_form.password.data):
             login_user(user, remember=login_form.remember_me.data)
-            user.authenticated = True
+            _mark_user_authenticated(user, True)
             flash("Logged in successfully")
 
             next_url = request.args.get("next")
@@ -153,9 +154,20 @@ def logout():
     Log out the current user.
     :return: the home page.
     """
+    user = current_user
+    _mark_user_authenticated(user, False)
     logout_user()
     print("Successfully logged out user")
     return redirect("/")
+
+
+def _mark_user_authenticated(user, authenticated):
+    try:
+        user.authenticated = authenticated
+        db.session.add(user)
+        db.session.commit()
+    except InvalidRequestError as error:
+        print(error)
 
 
 @login_manager.user_loader

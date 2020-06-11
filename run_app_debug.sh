@@ -9,6 +9,6 @@ if [[ $1 != "skip" ]]; then
 fi
 
 # start app in debug mode
-export FLASK_APP=app.py
+export FLASK_APP=app/feedme_app.py
 export FLASK_ENV=development
 flask run
