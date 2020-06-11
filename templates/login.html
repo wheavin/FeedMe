@@ -11,7 +11,19 @@
     </div>
     <div id="login_form">
         <h2>Sign In</h2>
-        <form action="" method="post" novalidate>
+
+        <!-- Display any flashed messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message[1] }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <form action="" method="POST" novalidate>
             {{ login_form.hidden_tag() }}
             <p>
                 {{ login_form.email.label }}<br>

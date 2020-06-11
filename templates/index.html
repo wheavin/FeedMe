@@ -12,7 +12,7 @@
         <h1>FeedMe</h1>
     </div>
     <div id="menu">
-        <a href="/config">Configure RSS Feed URLs</a>
+        <a id="logout" href="#">Logout</a> | <a href="/config">Configure RSS Feed URLs</a>
     </div>
     <div class="inline">
         <div id="feed_links">
@@ -47,8 +47,22 @@
                         // handle error
                     }
                 });
-            }); 
+            });
+
+            $("#logout").click(function() {
+                $.ajax({
+                    url: "/logout",
+                    type: "get",
+                    success: function(response) {
+                        // success
+                    },
+                    error: function(xhr) {
+                        // handle error
+                    }
+                });
+            });
         });
+
     </script>
 </body>
 </html>

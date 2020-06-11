@@ -4,7 +4,7 @@ REST endpoints for FeedMe app.
 """
 
 import flask_bcrypt as bcrypt
-from flask import Flask, render_template, request, redirect, flash
+from flask import Flask, render_template, request, redirect, flash, abort
 from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
 
@@ -12,6 +12,7 @@ from feed import feed
 from user.user import User
 from user.user_login import LoginForm
 from utils.files import get_full_path
+from utils.urls import is_safe_url
 
 DATABASE_FILE = "sqlite:///{}".format(get_full_path("urldatabase.db"))
 
@@ -38,6 +39,7 @@ class RssFeedUrl(db.Model):
 
 
 @feedme_app.route("/")
+@login_required
 def show_feed():
     """
     Displays the RSS Feed item URLs.
@@ -50,6 +52,7 @@ def show_feed():
 
 
 @feedme_app.route("/content", methods=["GET"])
+@login_required
 def fetch_feed_content():
     """
     Fetches the RSS feed content for a given URL.
@@ -88,6 +91,7 @@ def create():
 
 
 @feedme_app.route("/update", methods=["POST"])
+@login_required
 def update():
     """
     Updates URL for existing RSS feed URL entry.
@@ -103,6 +107,7 @@ def update():
 
 
 @feedme_app.route("/delete", methods=["POST"])
+@login_required
 def delete():
     """
     Deletes RSS feed URL entry from the database.
@@ -130,7 +135,12 @@ def login():
             login_user(user, remember=login_form.remember_me.data)
             user.authenticated = True
             flash("Logged in successfully")
-            return redirect(next or "/")
+
+            next_url = request.args.get("next")
+            if not is_safe_url(next_url):
+                return abort(400)
+
+            return redirect(next_url or "/")
 
     flash("Log in not successful")
     return render_template("login.html", login_form=login_form)
@@ -144,6 +154,7 @@ def logout():
     :return: the home page.
     """
     logout_user()
+    print("Successfully logged out user")
     return redirect("/")
 
 
