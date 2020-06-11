@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Login</title>
+    <link rel="stylesheet" href="/static/main.css">
+</head>
+<body>
+    <div id="banner">
+        <h1>FeedMe</h1>
+    </div>
+    <div id="login_form">
+        <h2>Sign In</h2>
+        <form action="" method="post" novalidate>
+            {{ login_form.hidden_tag() }}
+            <p>
+                {{ login_form.email.label }}<br>
+                {{ login_form.email(size=32) }}
+            </p>
+            <p>
+                {{ login_form.password.label }}<br>
+                {{ login_form.password(size=32) }}
+            </p>
+            <p>{{ login_form.remember_me() }} {{ login_form.remember_me.label }}</p>
+            <p>{{ login_form.login() }}</p>
+        </form>
+    </div>
+</body>
+</html>

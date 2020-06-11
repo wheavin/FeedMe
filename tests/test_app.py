@@ -10,6 +10,9 @@ HTTP_SUCCESS = 200
 
 class TestFeedMeApp(unittest.TestCase):
 
+    def setUp(self):
+        feedme_app.config["LOGIN_DISABLED"] = True
+
     @patch("app.RssFeedUrl")
     def test_load_home_with_valid_url(self, mock_rss_feed_url):
         # Given: a valid RSS Feed config

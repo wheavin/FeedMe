@@ -3,8 +3,9 @@
 REST endpoints for FeedMe app.
 """
 
+import flask_bcrypt as bcrypt
 from flask import Flask, render_template, request, redirect, flash
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, login_required, logout_user
 from flask_sqlalchemy import SQLAlchemy
 
 from feed import feed
@@ -22,6 +23,8 @@ feedme_app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
 db = SQLAlchemy(feedme_app)
 
 login_manager = LoginManager()
+login_manager.init_app(feedme_app)
+login_manager.login_view = "login"
 
 
 class RssFeedUrl(db.Model):
@@ -48,6 +51,10 @@ def show_feed():
 
 @feedme_app.route("/content", methods=["GET"])
 def fetch_feed_content():
+    """
+    Fetches the RSS feed content for a given URL.
+    :return: the RSS feed content.
+    """
     print("Fetching RSS feed content for " + request.args["url"])
     url = request.args.get("url")
     feed_content = feed.fetch_content_for_feed_url(url)
@@ -55,6 +62,7 @@ def fetch_feed_content():
 
 
 @feedme_app.route("/config", methods=["GET", "POST"])
+@login_required
 def create():
     """
     Adds new RSS feed URL to the database.
@@ -117,12 +125,26 @@ def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
         user = User.query.get(login_form.email.data)
-        if user:
-            login_user(user)
-            flash("Logged in successfully")
-            return redirect("/")
 
+        if user and bcrypt.check_password_hash(user.password, login_form.password.data):
+            login_user(user, remember=login_form.remember_me.data)
+            user.authenticated = True
+            flash("Logged in successfully")
+            return redirect(next or "/")
+
+    flash("Log in not successful")
     return render_template("login.html", login_form=login_form)
+
+
+@feedme_app.route("/logout")
+@login_required
+def logout():
+    """
+    Log out the current user.
+    :return: the home page.
+    """
+    logout_user()
+    return redirect("/")
 
 
 @login_manager.user_loader

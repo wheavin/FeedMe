@@ -4,7 +4,9 @@
 . */bin/activate
 
 # run all unit tests
-python3 tester.py
+if [[ $1 != "skip" ]]; then
+    python3 tester.py
+fi
 
 # start app in debug mode
 export FLASK_APP=app.py

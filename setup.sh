@@ -13,3 +13,6 @@ sudo pip3 install -r requirements.txt
 
 echo "Creating database"
 flask db upgrade
+
+echo "Creating admin user"
+python3 create_admin_user.py

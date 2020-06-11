@@ -5,4 +5,5 @@ flask-sqlalchemy
 flask-migrate
 flask-login
 flask-wtf
-bcrypt
+flask-bcrypt
+beautifulsoup4
