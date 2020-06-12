@@ -7,4 +7,5 @@ flask-migrate
 flask-login
 flask-wtf
 flask-bcrypt
+email-validator
 beautifulsoup4

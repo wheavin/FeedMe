@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -26,3 +27,9 @@ class User(db.Model):
 
     def is_anonymous(self):
         False
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)

@@ -3,8 +3,7 @@
 REST endpoints for FeedMe app.
 """
 
-import flask_bcrypt as bcrypt
-from flask import Flask, render_template, request, redirect, flash, abort
+from flask import Flask, render_template, request, redirect, flash, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import InvalidRequestError
@@ -12,6 +11,7 @@ from sqlalchemy.exc import InvalidRequestError
 from feed import feed
 from user.user import User
 from user.user_login import LoginForm
+from user.user_registration import RegistrationForm
 from utils.files import get_full_path
 from utils.urls import is_safe_url
 
@@ -132,7 +132,7 @@ def login():
     if login_form.validate_on_submit():
         user = User.query.get(login_form.email.data)
 
-        if user and bcrypt.check_password_hash(user.password, login_form.password.data):
+        if user and user.check_password(login_form.password.data):
             login_user(user, remember=login_form.remember_me.data)
             _mark_user_authenticated(user, True)
             flash("Logged in successfully")
@@ -140,10 +140,9 @@ def login():
             next_url = request.args.get("next")
             if not is_safe_url(next_url):
                 return abort(400)
+            else:
+                return redirect(next_url or "/")
 
-            return redirect(next_url or "/")
-
-    flash("Log in not successful")
     return render_template("login.html", login_form=login_form)
 
 
@@ -168,6 +167,27 @@ def _mark_user_authenticated(user, authenticated):
         db.session.commit()
     except InvalidRequestError as error:
         print(error)
+
+
+@feedme_app.route("/register", methods=["GET", "POST"])
+def register():
+    """
+    Registers a new user with provided email and password.
+    :return: login page if registration successful, otherwise return registration page.
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+
+    registration_form = RegistrationForm()
+    if registration_form.validate_on_submit():
+        user = User(email=registration_form.email.data)
+        user.set_password(registration_form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("You have successfully registered!")
+        return redirect(url_for("login"))
+
+    return render_template("register.html", page_title="Register", form=registration_form)
 
 
 @login_manager.user_loader

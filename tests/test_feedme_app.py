@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch
 
 from app.feedme_app import feedme_app, RssFeedUrl
+from user.user import User
 
 HTTP_SUCCESS = 200
 
@@ -11,7 +12,9 @@ HTTP_SUCCESS = 200
 class TestFeedMeApp(unittest.TestCase):
 
     def setUp(self):
+        feedme_app.config["TESTING"] = True
         feedme_app.config["LOGIN_DISABLED"] = True
+        feedme_app.config["WTF_CSRF_ENABLED"] = False
 
     @patch("app.feedme_app.RssFeedUrl")
     def test_load_home_with_valid_url(self, mock_rss_feed_url):
@@ -77,23 +80,13 @@ class TestFeedMeApp(unittest.TestCase):
 
     @patch("app.feedme_app.RssFeedUrl")
     def test_create_rss_feed_url_entry_duplicate(self, mock_rss_feed_url):
-        # Given: an new RSS feed URL
+        # Given: an already added RSS feed URL
         rss_feed_url = RssFeedUrl()
         rss_feed_url.url = "https://www.fiercewireless.com/rss/xml"
         mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
-        # When: a new RSS feed URL is added
-        response = feedme_app.test_client().post(
-            "/config",
-            data=dict(url="https://www.fiercewireless.com/rss/xml"),
-            follow_redirects=True
-        )
-        # Then: the config page is reloaded with new entry
-        self.assertEqual(HTTP_SUCCESS, response.status_code)
-        self.assertIn(b"https://www.fiercewireless.com/rss/xml", response.data)
-
-        # When: the same RSS feed URL is added again
+        # When: the RSS feed URL is added again
         response = feedme_app.test_client().post(
             "/config",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
@@ -150,3 +143,51 @@ class TestFeedMeApp(unittest.TestCase):
         # Then: the database has been updated with the removed entry
         assert mock_db.session.commit.called
         self.assertEqual(HTTP_SUCCESS, response.status_code)
+
+    @patch("app.feedme_app.db")
+    def test_register_with_new_user(self, mock_db):
+        # When: a new user is registered
+        response = feedme_app.test_client().post(
+            "/register",
+            data=dict(
+                email="bill@email.com", password="test", repeat_password="test", register=True),
+            follow_redirects=True
+        )
+        # Then: the registration is successful
+        assert mock_db.session.commit.called
+        self.assertEqual(HTTP_SUCCESS, response.status_code)
+        self.assertIn(b"Sign In", response.data)
+
+    @patch("app.feedme_app.db")
+    @patch("user.user_registration.User")
+    def test_register_with_invalid_email(self, mock_user, mock_db):
+        # Given: a user already existing with email
+        mock_user.query.filter_by.first.return_value = User(email="bill@email.com", password="test", authenticated=True)
+
+        # When: a new user is registered with same email
+        response = feedme_app.test_client().post(
+            "/register",
+            data=dict(
+                email="bill@email.com", password="test", repeat_password="test", register=True),
+            follow_redirects=True
+        )
+        # Then: the registration is not successful
+        assert not mock_db.session.commit.called
+        self.assertEqual(HTTP_SUCCESS, response.status_code)
+        self.assertIn(b"Register", response.data)
+        self.assertIn(b"Email already in use. Please choose a different email", response.data)
+
+    @patch("app.feedme_app.db")
+    def test_register_with_incorrect_repeat_password(self, mock_db):
+        # When: a new user is registered
+        response = feedme_app.test_client().post(
+            "/register",
+            data=dict(
+                email="bill@email.com", password="test", repeat_password="wrong_password", register=True),
+            follow_redirects=True
+        )
+        # Then: the registration is not successful
+        assert not mock_db.session.commit.called
+        self.assertEqual(HTTP_SUCCESS, response.status_code)
+        self.assertIn(b"Register", response.data)
+        self.assertIn(b"Field must be equal to password", response.data)
