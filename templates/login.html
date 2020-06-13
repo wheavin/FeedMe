@@ -1,45 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Login</title>
-    <link rel="stylesheet" href="/static/main.css">
-</head>
-<body>
-    <div id="banner">
-        <h1>FeedMe</h1>
-    </div>
-    <div id="menu">
-        <p></p>
-    </div>
-    <div id="login_form">
-        <h3>Sign In</h3>
+{% extends "base.html" %}
 
-        <!-- Display any flashed messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message[1] }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
+{% block menu %}
+<p></p>
+{% endblock %}
 
-        <form action="" method="POST" novalidate>
-            {{ login_form.hidden_tag() }}
-            <p>
-                {{ login_form.email.label }}<br>
-                {{ login_form.email(size=32) }}
-            </p>
-            <p>
-                {{ login_form.password.label }}<br>
-                {{ login_form.password(size=32) }}
-            </p>
-            <p>{{ login_form.remember_me() }} {{ login_form.remember_me.label }}</p>
-            <p>{{ login_form.login() }}</p>
-        </form>
-        <p>New User? <a href="{{ url_for('register') }}">Register Here!</a></p>
-    </div>
-</body>
-</html>
+{% block content %}
+<div id="login_form">
+    <h3>Sign In</h3>
+
+    <!-- Display any flashed messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message[1] }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <form action="" method="POST" novalidate>
+        {{ login_form.hidden_tag() }}
+        <p>
+            {{ login_form.email.label }}<br>
+            {{ login_form.email(size=32) }}
+        </p>
+        <p>
+            {{ login_form.password.label }}<br>
+            {{ login_form.password(size=32) }}
+        </p>
+        <p>{{ login_form.remember_me() }} {{ login_form.remember_me.label }}</p>
+        <p>{{ login_form.login() }}</p>
+    </form>
+    <p>New User? <a href="{{ url_for('register') }}">Register Here!</a></p>
+</div>
+{% endblock %}
