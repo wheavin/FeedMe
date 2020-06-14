@@ -20,17 +20,17 @@
     {% endwith %}
 
     <form action="" method="POST" novalidate>
-        {{ login_form.hidden_tag() }}
+        {{ form.hidden_tag() }}
         <p>
-            {{ login_form.email.label }}<br>
-            {{ login_form.email(size=32) }}
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}
         </p>
         <p>
-            {{ login_form.password.label }}<br>
-            {{ login_form.password(size=32) }}
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
         </p>
-        <p>{{ login_form.remember_me() }} {{ login_form.remember_me.label }}</p>
-        <p>{{ login_form.login() }}</p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.login() }}</p>
     </form>
     <p>New User? <a href="{{ url_for('register') }}">Register Here!</a></p>
 </div>

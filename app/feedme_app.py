@@ -49,7 +49,7 @@ def show_feed():
     print("Loading home page")
     rss_feed_url_entries = RssFeedUrl.query.all()
     rss_feed_urls = [entry.url for entry in rss_feed_url_entries]
-    return render_template("index.html", page_title="FeedMe", rss_feed_urls=rss_feed_urls)
+    return render_template("index.html", page_title="Home", rss_feed_urls=rss_feed_urls)
 
 
 @feedme_app.route("/content", methods=["GET"])
@@ -88,7 +88,7 @@ def create():
             flash("Please provide a valid URL")
 
     urls = RssFeedUrl.query.all()
-    return render_template("urlconfig.html", rss_feed_urls=urls)
+    return render_template("urlconfig.html", page_title="Configure RSS Feeds", rss_feed_urls=urls)
 
 
 @feedme_app.route("/update", methods=["POST"])
@@ -143,7 +143,7 @@ def login():
             else:
                 return redirect(next_url or "/")
 
-    return render_template("login.html", login_form=login_form)
+    return render_template("login.html", page_title="Login", form=login_form)
 
 
 @feedme_app.route("/logout")
