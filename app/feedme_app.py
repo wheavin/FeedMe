@@ -5,6 +5,7 @@ REST endpoints for FeedMe app.
 
 from flask import Flask, render_template, request, redirect, flash, abort, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import InvalidRequestError
 
@@ -23,6 +24,7 @@ feedme_app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_FILE
 feedme_app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
 
 db = SQLAlchemy(feedme_app)
+migrate = Migrate(feedme_app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(feedme_app)

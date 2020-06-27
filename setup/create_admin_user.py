@@ -4,7 +4,7 @@ import sys
 
 import flask_bcrypt as bcrypt
 
-from app import feedme_app
+from app.feedme_app import feedme_app
 from user.user import db, User
 
 
