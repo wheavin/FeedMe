@@ -127,6 +127,12 @@
           "type": "text/html"
         }
       ]
+    },
+    {
+      "title": "A title",
+      "author": "William",
+      "link": "http://some-link.com",
+      "summary": ""
     }
   ],
   "encoding": "utf-8"

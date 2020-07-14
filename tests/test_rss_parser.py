@@ -130,14 +130,6 @@ class TestRssParsing(unittest.TestCase):
             "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
             "entries": [{"title": "Some Entry Title"}]
         }],
-        ["No author element", {
-            "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
-            "entries": [{"title": "Some Entry Title", "link": "some link"}]
-        }],
-        ["No summary element", {
-            "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
-            "entries": [{"title": "Some Entry Title", "link": "some link", "author": "Joe Bloggs"}]
-        }],
         ["Null title element", {
             "feed": {"title": "Some Title", "link": "some link", "description": "blah"},
             "entries": [{"title": None, "link": "some link", "author": "Joe Bloggs", "summary": "blah",
