@@ -4,12 +4,12 @@ import sys
 
 import flask_bcrypt as bcrypt
 
-from app.feedme_app import feedme_app
+from app.feedme_app import app
 from user.user import db, User
 
 
 def main():
-    with feedme_app.app_context():
+    with app.app_context():
         db.metadata.create_all(db.engine)
         if User.query.all():
             print("An admin user already exists!"),

@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from parameterized import parameterized
 
-from app.feedme_app import feedme_app
+from app.feedme_app import app
 from tests.test_app_base import TestAppBase, HTTP_SUCCESS
 from user.user import User
 
@@ -20,7 +20,7 @@ class TestAppLogin(TestAppBase):
         mock_user.query.get.return_value = registered_user
 
         # When: valid login credentials are provided
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/login",
             data=dict(email="bill@email.com", password="test", remember_me=False, login=True),
             follow_redirects=True
@@ -45,7 +45,7 @@ class TestAppLogin(TestAppBase):
         mock_user.query.get.return_value = registered_user
 
         # When: login credentials are provided with invalid password
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/login",
             data=dict(email="bill@email.com", password=invalid_password, remember_me=False, login=True),
             follow_redirects=True
@@ -68,7 +68,7 @@ class TestAppLogin(TestAppBase):
         mock_user.query.get.return_value = None
 
         # When: login credentials are provided with invalid user
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/login",
             data=dict(email=invalid_email, password="test", remember_me=False, login=True),
             follow_redirects=True

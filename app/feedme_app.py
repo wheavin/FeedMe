@@ -18,16 +18,16 @@ from utils.urls import is_safe_url
 
 DATABASE_FILE = "sqlite:///{}".format(get_full_path("urldatabase.db"))
 
-feedme_app = Flask(__name__, template_folder="../templates", static_folder="../static")
-feedme_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-feedme_app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_FILE
-feedme_app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_FILE
+app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
 
-db = SQLAlchemy(feedme_app)
-migrate = Migrate(feedme_app, db)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 login_manager = LoginManager()
-login_manager.init_app(feedme_app)
+login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
@@ -41,7 +41,7 @@ class RssFeedUrl(db.Model):
         return "<RssFeedUrl: {}>".format(self.url)
 
 
-@feedme_app.route("/")
+@app.route("/")
 @login_required
 def show_feed():
     """
@@ -54,7 +54,7 @@ def show_feed():
     return render_template("index.html", page_title="Home", rss_feed_urls=rss_feed_urls)
 
 
-@feedme_app.route("/content", methods=["GET"])
+@app.route("/content", methods=["GET"])
 @login_required
 def fetch_feed_content():
     """
@@ -67,7 +67,7 @@ def fetch_feed_content():
     return feed_content
 
 
-@feedme_app.route("/config", methods=["GET", "POST"])
+@app.route("/config", methods=["GET", "POST"])
 @login_required
 def create():
     """
@@ -93,7 +93,7 @@ def create():
     return render_template("urlconfig.html", page_title="Configure RSS Feeds", rss_feed_urls=urls)
 
 
-@feedme_app.route("/update", methods=["POST"])
+@app.route("/update", methods=["POST"])
 @login_required
 def update():
     """
@@ -109,7 +109,7 @@ def update():
     return redirect("/config")
 
 
-@feedme_app.route("/delete", methods=["POST"])
+@app.route("/delete", methods=["POST"])
 @login_required
 def delete():
     """
@@ -124,7 +124,7 @@ def delete():
     return redirect("/config")
 
 
-@feedme_app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     """
     Logs in the user given provided user id and password.
@@ -148,7 +148,7 @@ def login():
     return render_template("login.html", page_title="Login", form=login_form)
 
 
-@feedme_app.route("/logout")
+@app.route("/logout")
 @login_required
 def logout():
     """
@@ -171,7 +171,7 @@ def _mark_user_authenticated(user, authenticated):
         print(error)
 
 
-@feedme_app.route("/register", methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     """
     Registers a new user with provided email and password.
@@ -203,4 +203,4 @@ def user_loader(user_id):
 
 
 if __name__ == '__main__':
-    feedme_app.run()
+    app.run()

@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from app.feedme_app import feedme_app, RssFeedUrl
+from app.feedme_app import app, RssFeedUrl
 from tests.test_app_base import TestAppBase, HTTP_SUCCESS
 
 
@@ -16,7 +16,7 @@ class TestAppFeedContent(TestAppBase):
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
         # When: the root path is loaded
-        response = feedme_app.test_client().get("/")
+        response = app.test_client().get("/")
 
         # Then: the RSS feed content is successfully returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
@@ -33,7 +33,7 @@ class TestAppFeedContent(TestAppBase):
                          "published": "123"}]
         }
         # When the RSS feed content is fetched for URL
-        response = feedme_app.test_client().get("/content?url=" + rss_feed_url)
+        response = app.test_client().get("/content?url=" + rss_feed_url)
 
         # Then the feed content for URL is returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)
@@ -48,7 +48,7 @@ class TestAppFeedContent(TestAppBase):
             'bozo_exception': TypeError("a bytes-like object is required, not 'RssFeedUrl'", ), 'feed': {}
         }
         # When: the root path is loaded
-        response = feedme_app.test_client().get("/content?url=" + rss_feed_url)
+        response = app.test_client().get("/content?url=" + rss_feed_url)
 
         # Then: no RSS feed content is returned
         self.assertEqual(HTTP_SUCCESS, response.status_code)

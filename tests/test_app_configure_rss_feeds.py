@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from app.feedme_app import feedme_app, RssFeedUrl
+from app.feedme_app import app, RssFeedUrl
 from tests.test_app_base import TestAppBase, HTTP_SUCCESS
 
 
@@ -16,7 +16,7 @@ class TestAppConfigureRssFeeds(TestAppBase):
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
         # When: a new RSS feed URL is added
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/config",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
             follow_redirects=True
@@ -34,7 +34,7 @@ class TestAppConfigureRssFeeds(TestAppBase):
         mock_rss_feed_url.query.all.return_value = [rss_feed_url]
 
         # When: the RSS feed URL is added again
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/config",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
             follow_redirects=True
@@ -45,7 +45,7 @@ class TestAppConfigureRssFeeds(TestAppBase):
 
     def test_create_rss_feed_url_entry_with_empty_data(self):
         # When: a blank RSS feed URL is added
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/config",
             data=dict(url=""),
             follow_redirects=True
@@ -63,7 +63,7 @@ class TestAppConfigureRssFeeds(TestAppBase):
         mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
 
         # When: the RSS feed URL entry is updated
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/update",
             data=dict(
                 new_url="https://www.someothersite.com/rss/xml", old_url="https://www.fiercewireless.com/rss/xml"),
@@ -82,7 +82,7 @@ class TestAppConfigureRssFeeds(TestAppBase):
         mock_rss_feed_url.query.filter_by.first.return_value = rss_feed_url
 
         # When: the RSS feed URL entry is deleted
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/delete",
             data=dict(url="https://www.fiercewireless.com/rss/xml"),
             follow_redirects=True

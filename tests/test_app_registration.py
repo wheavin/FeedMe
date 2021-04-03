@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from parameterized import parameterized
 
-from app.feedme_app import feedme_app
+from app.feedme_app import app
 from tests.test_app_base import TestAppBase, HTTP_SUCCESS
 from user.user import User
 
@@ -14,7 +14,7 @@ class TestAppRegistration(TestAppBase):
 
     def test_register_with_new_user(self, mock_db):
         # When: a new user is registered
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/register",
             data=dict(email="bill@email.com", password="test", repeat_password="test", register=True),
             follow_redirects=True
@@ -32,7 +32,7 @@ class TestAppRegistration(TestAppBase):
     ])
     def test_register_with_invalid_email(self, mock_db, _, invalid_email, expected_error):
         # When: a new user is registered with invalid email
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/register",
             data=dict(email=invalid_email, password="test", repeat_password="test", register=True),
             follow_redirects=True
@@ -49,7 +49,7 @@ class TestAppRegistration(TestAppBase):
         mock_user.query.filter_by.first.return_value = User(email="bill@email.com", password="test", authenticated=True)
 
         # When: a new user is registered with same email
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/register",
             data=dict(
                 email="bill@email.com", password="test", repeat_password="test", register=True),
@@ -68,7 +68,7 @@ class TestAppRegistration(TestAppBase):
     ])
     def test_register_with_no_password_provided(self, mock_db, _, invalid_password):
         # When: a new user is registered with no password provided
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/register",
             data=dict(
                 email="bill@email.com", password=invalid_password, repeat_password=invalid_password, register=True),
@@ -82,7 +82,7 @@ class TestAppRegistration(TestAppBase):
 
     def test_register_with_incorrect_repeat_password(self, mock_db):
         # When: a new user is registered
-        response = feedme_app.test_client().post(
+        response = app.test_client().post(
             "/register",
             data=dict(
                 email="bill@email.com", password="test", repeat_password="wrong_password", register=True),

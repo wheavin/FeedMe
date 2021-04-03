@@ -17,7 +17,7 @@ flask db init
 flask db upgrade
 
 echo "===== Creating database schema ====="
-python3 setup/create_db_schema.py
+python3 create_db_schema.py
 
 echo "===== Creating admin user ====="
-python3 setup/create_admin_user.py
+python3 create_admin_user.py
