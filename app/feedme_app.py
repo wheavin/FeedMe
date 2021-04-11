@@ -4,6 +4,7 @@ REST endpoints for FeedMe app.
 """
 
 from flask import Flask, render_template, request, redirect, flash, abort, url_for
+from flask_caching import Cache
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -26,6 +27,8 @@ app.config["SECRET_KEY"] = "7d441f27d441f27567d441f2b6176a"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+cache = Cache(app, config={'CACHE_TYPE': 'simple', 'CACHE_DEFAULT_TIMEOUT': 360})
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
@@ -43,6 +46,7 @@ class RssFeedUrl(db.Model):
 
 @app.route("/")
 @login_required
+@cache.cached(key_prefix='feed_urls')
 def show_feed():
     """
     Displays the RSS Feed item URLs.
@@ -63,8 +67,14 @@ def fetch_feed_content():
     """
     print("Fetching RSS feed content for " + request.args["url"])
     url = request.args.get("url")
-    feed_content = feed.fetch_content_for_feed_url(url)
-    return feed_content
+    cached_content = cache.get(url)
+
+    if cached_content is not None:
+        return cached_content
+    else:
+        feed_content = feed.fetch_content_for_feed_url(url)
+        cache.set(url, feed_content)
+        return feed_content
 
 
 @app.route("/config", methods=["GET", "POST"])

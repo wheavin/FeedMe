@@ -5,6 +5,7 @@
 
 # run all unit tests
 if [[ $1 != "skip" ]]; then
+    echo "Skipping tests"
     python3 tester.py
 fi
 
