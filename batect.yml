@@ -1,0 +1,50 @@
+containers:
+  build-env:
+    image: python:3.7
+    volumes:
+      - local: .
+        container: /code
+      - local: .pip-cache
+        container: /code/.pip-cache
+        options: cached
+      - local: .pipenv-cache
+        container: /code/.pipenv-cache
+    working_directory: /code
+    environment:
+      PYTHONPATH: "/code"
+      PYTHONUSERBASE: "/code/.pip-cache"
+      PIPENV_VENV_IN_PROJECT: true
+    run_as_current_user:
+      enabled: true
+      home_directory: /home/container-user
+
+tasks:
+  shell:
+    description: Install deps; Start a shell in the development environment.
+    group: Utility tasks
+    run:
+      container: build-env
+      command: /bin/sh -c './setup.sh; /bin/sh'
+
+  setup:
+    description: Install deps.
+    group: Utility tasks
+    run:
+      container: build-env
+      command: /bin/sh -c './setup.sh'
+
+  unit:
+    description: Runs the unit tests
+    group: Test tasks
+    run:
+      container: build-env
+      command: /bin/sh -c '/code/.pip-cache/bin/py.test'
+
+  run:
+    description: Runs the application.
+    group: Test tasks
+    run:
+      container: build-env
+      command: /bin/sh -c './run_app_debug.sh'
+      ports:
+        - 2000:5000

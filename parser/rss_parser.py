@@ -44,6 +44,9 @@ class RssUrlParser:
         Parses RSS feed data from given RSS feed URL.
         :return: the formatted RSS feed data.
         """
+        if not self.url:
+            raise RssParserError("Error parsing for URL %s" % self.url)
+
         print("Parsing RSS feed for URL:", self.url)
         rss_feed_response = feedparser.parse(self.url)
         self._validate_response(rss_feed_response)

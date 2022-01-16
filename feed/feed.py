@@ -12,8 +12,10 @@ def fetch_content_for_feed_url(rss_feed_url):
     :return:
     """
     feed_content = "No RSS feed content to display"
-    rss_url_parser = RssUrlParser(rss_feed_url)
+    if not rss_feed_url:
+        return feed_content
     try:
+        rss_url_parser = RssUrlParser(rss_feed_url)
         feed_content = rss_url_parser.parse()
     except RssParserError as error:
         print(error.message)
